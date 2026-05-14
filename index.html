@@ -5,7 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#161616" media="(prefers-color-scheme: dark)">
-<title>다음</title>
+<title>다음할일</title>
+<!-- PWA / iOS 홈 화면 추가 시 사용 -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="다음할일">
+<meta name="application-name" content="다음할일">
+<meta name="description" content="다음 할 일을 미루지 않게 — 정체성 기반 습관 트래커">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -1765,7 +1771,7 @@
     <div class="header-top">
       <div class="logo">
         <div class="logo-mark"></div>
-        <span>다음</span>
+        <span>다음할일</span>
       </div>
       <div class="header-actions">
         <button class="icon-btn" id="syncBtn" title="동기화 / 로그인" data-icon="cloud">
@@ -2720,7 +2726,7 @@ function collectLocalDataForSync() {
   });
   return {
     version: 2,
-    appName: '다음',
+    appName: '다음할일',
     updatedAt: new Date().toISOString(),
     deviceId: getDeviceId(),
     data
@@ -4455,7 +4461,7 @@ function exportAllData() {
   const blob = new Blob([JSON.stringify({
     version: 1,
     exportedAt: new Date().toISOString(),
-    appName: '다음',
+    appName: '다음할일',
     data
   }, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
