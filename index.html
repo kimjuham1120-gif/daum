@@ -816,44 +816,139 @@
   
   /* 장기목표 모달 - 세부 일정 */
   .task-list {
-    display: flex; flex-direction: column; gap: 6px;
+    display: flex; flex-direction: column; gap: 8px;
     margin-top: 8px;
   }
   .task-row {
-    display: flex; align-items: center; gap: 7px;
-    padding: 9px 10px;
+    display: flex; flex-direction: column; gap: 8px;
+    padding: 11px 12px;
     background: var(--bg-soft);
     border: 1px solid var(--border);
-    border-radius: 7px;
+    border-radius: 8px;
+    transition: border-color 0.15s, background 0.15s;
   }
-  .task-day-select {
-    background: var(--bg); border: 1.5px solid var(--border); border-radius: 5px;
-    padding: 5px 7px; font-family: inherit; font-size: 12px; color: var(--text);
-    font-weight: 700;
-    flex-shrink: 0;
+  .task-row:hover { border-color: var(--border-strong); }
+  .task-row-top {
+    display: flex; align-items: center; gap: 7px;
   }
   .task-label-input {
     flex: 1; background: var(--bg); border: 1.5px solid var(--border);
-    border-radius: 5px; padding: 6px 9px;
+    border-radius: 5px; padding: 7px 10px;
     font-family: inherit; font-size: 13px; color: var(--text); outline: none;
-    font-weight: 500;
+    font-weight: 600;
     min-width: 0;
+    transition: border-color 0.15s;
   }
+  .task-label-input:focus { border-color: var(--text); }
   .task-time-input {
     background: var(--bg); border: 1.5px solid var(--border); border-radius: 5px;
-    padding: 6px 9px; font-family: inherit; font-size: 12px; color: var(--text);
-    width: 64px; text-align: center;
-    font-variant-numeric: tabular-nums; font-weight: 500;
+    padding: 7px 6px; font-family: inherit; font-size: 12px; color: var(--text);
+    width: 56px; text-align: center;
+    font-variant-numeric: tabular-nums; font-weight: 700;
     flex-shrink: 0;
+    transition: border-color 0.15s;
+  }
+  .task-time-input:focus { border-color: var(--text); }
+  .task-time-suffix {
+    font-size: 11px; color: var(--text-muted);
+    margin-left: -4px; font-weight: 600;
   }
   .task-delete-btn {
     background: transparent; border: none; color: var(--text-muted);
-    cursor: pointer; padding: 5px 6px; border-radius: 4px;
+    cursor: pointer; padding: 6px; border-radius: 5px;
     flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, color 0.15s;
   }
   .task-delete-btn:hover { color: var(--warn); background: var(--warn-soft); }
   .task-delete-btn .ic { width: 14px; height: 14px; }
+  
+  /* 일정 모드: 반복 / 날짜 */
+  .task-mode-tabs {
+    display: inline-flex;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    padding: 2px;
+    gap: 1px;
+    align-self: flex-start;
+  }
+  .task-mode-tab {
+    background: transparent;
+    border: none;
+    padding: 4px 11px;
+    font-family: inherit;
+    font-size: 11px; font-weight: 700;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 4px;
+    letter-spacing: -0.01em;
+    transition: background 0.15s, color 0.15s;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .task-mode-tab:hover { color: var(--text); }
+  .task-mode-tab.active {
+    background: var(--text); color: var(--bg);
+  }
+  .task-mode-tab .ic { width: 11px; height: 11px; }
+  
+  /* 요일 칩 (다중 선택) */
+  .task-day-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+  .task-day-pick {
+    padding: 7px 0;
+    border: 1.5px solid var(--border);
+    background: var(--bg);
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 11.5px; font-weight: 700;
+    color: var(--text-soft);
+    cursor: pointer; user-select: none;
+    text-align: center;
+    letter-spacing: -0.01em;
+    transition: background 0.12s, color 0.12s, border-color 0.12s;
+  }
+  .task-day-pick:hover { border-color: var(--border-strong); }
+  .task-day-pick.sun { color: var(--warn); }
+  .task-day-pick.sat { color: var(--indigo); }
+  .task-day-pick.on {
+    background: var(--text); color: var(--bg); border-color: var(--text);
+  }
+  .task-day-pick.on.sun, .task-day-pick.on.sat { color: var(--bg); }
+  
+  /* 특정 날짜 입력 */
+  .task-date-row {
+    display: flex; gap: 7px; align-items: center;
+  }
+  .task-date-input {
+    flex: 1;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 5px;
+    padding: 7px 10px;
+    font-family: inherit;
+    font-size: 13px; font-weight: 600;
+    color: var(--text);
+    outline: none;
+    color-scheme: inherit;
+    transition: border-color 0.15s;
+  }
+  .task-date-input:focus { border-color: var(--text); }
+  .task-date-dday {
+    font-size: 11px; font-weight: 800;
+    padding: 5px 10px;
+    border-radius: 10px;
+    background: var(--indigo); color: white;
+    letter-spacing: 0.02em;
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+  }
+  .task-date-dday.warning { background: var(--gold); }
+  .task-date-dday.urgent { background: var(--warn); }
+  .task-date-dday.past { background: var(--text-muted); }
   
   .add-task-btn {
     background: transparent; border: 1.5px dashed var(--border-strong);
@@ -1358,6 +1453,90 @@
     background: var(--gold-soft); color: var(--gold); border-color: var(--gold);
   }
 
+  /* 다중 마감일 리스트 (목표 모달) */
+  .deadline-list {
+    display: flex; flex-direction: column; gap: 6px;
+    margin-top: 4px;
+  }
+  .deadline-row {
+    display: flex; align-items: center; gap: 6px;
+    padding: 9px 10px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    flex-wrap: wrap;
+  }
+  .deadline-label-input {
+    flex: 1 1 110px; background: var(--bg); border: 1.5px solid var(--border);
+    border-radius: 5px; padding: 6px 9px;
+    font-family: inherit; font-size: 13px; font-weight: 600;
+    color: var(--text); outline: none; min-width: 80px;
+    transition: border-color 0.15s;
+  }
+  .deadline-label-input:focus { border-color: var(--text); }
+  .deadline-date-input {
+    background: var(--bg); border: 1.5px solid var(--border);
+    border-radius: 5px; padding: 6px 9px;
+    font-family: inherit; font-size: 12px; font-weight: 500;
+    color: var(--text); outline: none;
+    flex: 0 0 auto;
+    color-scheme: inherit;
+    font-variant-numeric: tabular-nums;
+    transition: border-color 0.15s;
+  }
+  .deadline-date-input:focus { border-color: var(--text); }
+  .deadline-dday-mini {
+    font-size: 10px; font-weight: 800;
+    padding: 3px 8px; border-radius: 9px;
+    background: var(--indigo); color: white;
+    flex: 0 0 auto;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+  }
+  .deadline-dday-mini.warning { background: var(--gold); }
+  .deadline-dday-mini.urgent { background: var(--warn); }
+  .deadline-dday-mini.past { background: var(--text-muted); }
+  .deadline-delete-btn {
+    background: transparent; border: none; color: var(--text-muted);
+    cursor: pointer; padding: 5px 6px; border-radius: 4px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .deadline-delete-btn:hover { color: var(--warn); background: var(--warn-soft); }
+  .deadline-delete-btn .ic { width: 14px; height: 14px; }
+  .add-deadline-btn {
+    background: transparent; border: 1.5px dashed var(--border-strong);
+    color: var(--text-soft);
+    padding: 8px; border-radius: 6px;
+    font-family: inherit; font-size: 12px; font-weight: 600;
+    cursor: pointer; margin-top: 6px;
+    width: 100%;
+    display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .add-deadline-btn .ic { width: 12px; height: 12px; }
+  .add-deadline-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+  /* 카드의 마감일 스트립 (다중 표시) */
+  .goal-deadlines-strip {
+    display: flex; flex-wrap: wrap;
+    gap: 4px 8px;
+    margin-top: 6px;
+    font-size: 11.5px;
+    color: var(--text-soft);
+    font-weight: 600;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+  }
+  .goal-dl-item { display: inline-flex; align-items: baseline; gap: 4px; }
+  .goal-dl-item .dl-label { color: var(--text-muted); font-weight: 600; }
+  .goal-dl-item .dl-date { color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .goal-dl-item.upcoming-next .dl-label,
+  .goal-dl-item.upcoming-next .dl-date { color: var(--indigo); }
+  .goal-dl-item.past .dl-label,
+  .goal-dl-item.past .dl-date { color: var(--text-muted); text-decoration: line-through; }
+  .goal-dl-sep { color: var(--text-muted); opacity: 0.5; }
+
   /* ============ 작은 진전 하이라이트 (오늘 첫 진전) ============ */
   .first-progress-banner {
     background: var(--accent);
@@ -1841,9 +2020,9 @@
     </div>
     
     <div class="field-group">
-      <label class="field-label">마감일시</label>
-      <input type="datetime-local" class="datetime-input" id="gDeadline">
-      <div class="deadline-suggestions" id="deadlineSuggestions"></div>
+      <label class="field-label">주요 날짜 <span style="color:var(--text-muted);font-weight:400;">(여러 개 가능 — 시험·지원 마감·발표 등)</span></label>
+      <div class="deadline-list" id="deadlineList"></div>
+      <button class="add-deadline-btn" id="addDeadlineBtn" data-icon-before="plus">날짜 추가</button>
     </div>
     
     <div class="field-group">
@@ -2127,7 +2306,7 @@ let goals = []; // 장기 목표
 let freeText = '';
 let autoSaveTimer = null;
 let modalState = { editingId: null, types: ['text'], pinned: true, days: ['all'], goalMinutes: 0, cue: '', place: '', bundle: '', difficulty: 3 };
-let goalModalState = { editingId: null, tasks: [] };
+let goalModalState = { editingId: null, tasks: [], deadlines: [] };
 let confirmCallback = null;
 
 const DAY_SHORT = ['일','월','화','수','목','금','토'];
@@ -2256,8 +2435,56 @@ function saveTemplate() {
   return lsSet(lsKey('template'), pinned);
 }
 
-function loadGoals() { return lsGet(lsKey('goals')) || []; }
+function loadGoals() {
+  const arr = lsGet(lsKey('goals')) || [];
+  return arr.map(migrateGoal);
+}
 function saveGoals() { const r = lsSet(lsKey('goals'), goals); scheduleSyncPush(); return r; }
+
+// 단일 deadline → deadlines 배열 마이그레이션 (하위 호환)
+function migrateGoal(g) {
+  if (!g) return g;
+  if (!Array.isArray(g.deadlines) || g.deadlines.length === 0) {
+    if (g.deadline) {
+      g.deadlines = [{
+        id: 'd_' + Math.random().toString(36).slice(2, 8),
+        label: '마감',
+        date: g.deadline,
+      }];
+    } else {
+      g.deadlines = [];
+    }
+  }
+  // 옛 데이터 정리: deadline 필드는 backward-read 용으로 유지하되, 갱신은 안 함
+  return g;
+}
+
+// 다중 마감일 헬퍼
+function getAllDeadlinesSorted(goal) {
+  if (!goal || !Array.isArray(goal.deadlines)) return [];
+  return [...goal.deadlines]
+    .filter(d => d && d.date)
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+}
+function getPrimaryDeadline(goal) {
+  // D-day로 쓸 마감: 다가오는 게 있으면 가장 가까운 것, 없으면 마지막
+  const sorted = getAllDeadlinesSorted(goal);
+  if (sorted.length === 0) return null;
+  const now = new Date();
+  return sorted.find(d => new Date(d.date) >= now) || sorted[sorted.length - 1];
+}
+function getLastDeadline(goal) {
+  const sorted = getAllDeadlinesSorted(goal);
+  return sorted[sorted.length - 1] || null;
+}
+function goalPrimaryISO(goal) {
+  const p = getPrimaryDeadline(goal);
+  return p ? p.date : null;
+}
+function goalLastISO(goal) {
+  const l = getLastDeadline(goal);
+  return l ? l.date : null;
+}
 
 // 정체성 선언 (Identity-based Habits, Clear 2018)
 function loadIdentity() { return lsGet(lsKey('identity')) || ''; }
@@ -2764,17 +2991,28 @@ function syncGoalTasksToEntries() {
   const today = new Date(currentDate + 'T00:00:00');
   
   goals.forEach(goal => {
-    const deadline = new Date(goal.deadline);
-    if (deadline < today) return; // 마감 지난 목표는 스킵
+    const lastIso = goalLastISO(goal);
+    if (!lastIso) return; // 마감일이 하나도 없으면 스킵
+    const lastDeadline = new Date(lastIso);
+    if (lastDeadline < today) return; // 마지막 마감도 지난 목표는 스킵
     
     if (!goal.tasks || goal.tasks.length === 0) return;
     
     goal.tasks.forEach(task => {
-      // 오늘이 task의 요일이면 표시
-      const todayDayIdx = today.getDay();
-      const taskDays = task.days || [];
-      const applies = taskDays.includes('all') || 
-                     taskDays.some(d => (typeof d === 'string' ? parseInt(d,10) : d) === todayDayIdx);
+      // 모드별 적용 여부 판단
+      const mode = task.mode || 'weekly';
+      let applies = false;
+      if (mode === 'date') {
+        // 특정 날짜: 오늘이 그 날짜일 때만 주입
+        const todayStr = toLocalDateStr(today);
+        applies = (task.date === todayStr);
+      } else {
+        // 매주 반복: 오늘 요일이 task.days에 포함되면 주입
+        const todayDayIdx = today.getDay();
+        const taskDays = task.days || [];
+        applies = taskDays.includes('all') || 
+                  taskDays.some(d => (typeof d === 'string' ? parseInt(d,10) : d) === todayDayIdx);
+      }
       if (!applies) return;
       
       // 해당 날짜 저장된 데이터에서 진행 상황 확인
@@ -2817,13 +3055,15 @@ function computeGoalProgress(goal) {
   const todayStr = toLocalDateStr(new Date());
   const today = new Date(todayStr + 'T00:00:00');
   
-  // 마감일 (로컬 시간대 자정 기준)
-  const deadlineDate = new Date(goal.deadline);
+  // 마감일 (로컬 시간대 자정 기준) — 다중 마감 중 가장 마지막
+  const lastIso = goalLastISO(goal) || goal.deadline;
+  if (!lastIso) return { done: 0, total: 0, percent: 0, daysLeft: 0 };
+  const deadlineDate = new Date(lastIso);
   const deadlineStr = toLocalDateStr(deadlineDate);
   const deadline = new Date(deadlineStr + 'T00:00:00');
   
   // 생성일 (로컬 시간대 자정 기준)
-  const createdDate = new Date(goal.createdAt || goal.deadline);
+  const createdDate = new Date(goal.createdAt || lastIso);
   const createdStr = toLocalDateStr(createdDate);
   const created = new Date(createdStr + 'T00:00:00');
   
@@ -2833,8 +3073,41 @@ function computeGoalProgress(goal) {
   const endCheck = deadline;
   
   goal.tasks.forEach(task => {
-    const taskDays = task.days || ['all'];
+    const mode = task.mode || 'weekly';
     const taskGoalMin = task.minutes || 60;
+    
+    // 특정 날짜 모드: 단일 세션 카운트
+    if (mode === 'date') {
+      if (!task.date) return;
+      const taskDateStr = task.date;
+      const taskDate = new Date(taskDateStr + 'T00:00:00');
+      // 마감일 이후 또는 시작일 이전 날짜는 카운트 안 함
+      if (taskDate < startDate || taskDate > endCheck) return;
+      totalSessions++;
+      // 진행 데이터 확인
+      let entryData = null;
+      if (taskDateStr === currentDate) {
+        entryData = entries.find(x => x.fromGoalId === goal.id && x.fromTaskId === task.id);
+      }
+      if (!entryData) {
+        const data = loadGrowth(taskDateStr);
+        if (data && data.entries) {
+          entryData = data.entries.find(x => x.fromGoalId === goal.id && x.fromTaskId === task.id);
+        }
+      }
+      if (entryData && entryData.values) {
+        const actual = entryData.values.actualMinutes || 0;
+        if (entryData.values.check === true || entryData.values.check === 'true') {
+          doneSum += 1;
+        } else if (actual > 0) {
+          doneSum += Math.min(1, actual / taskGoalMin);
+        }
+      }
+      return;
+    }
+    
+    // 매주 반복 모드
+    const taskDays = task.days || ['all'];
     
     let cursor = new Date(startDate);
     
@@ -3167,9 +3440,11 @@ function detectGoalRisk() {
   const today = new Date(toLocalDateStr(new Date()) + 'T00:00:00');
   const atRisk = [];
   goals.forEach(goal => {
-    const deadline = new Date(goal.deadline);
+    const primaryIso = goalPrimaryISO(goal);
+    if (!primaryIso) return;
+    const deadline = new Date(primaryIso);
     if (deadline < today) return; // 마감 지난 건 스킵
-    const dday = computeDDay(goal.deadline);
+    const dday = computeDDay(primaryIso);
     if (dday.days > 30 || dday.days < 0) return; // 30일 이내만
     const progress = computeGoalProgress(goal);
     if (progress.percent < 50 && dday.days <= 7) {
@@ -3434,28 +3709,56 @@ function renderGoals() {
     return;
   }
   
-  // 마감일 순 정렬
-  const sorted = [...goals].sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+  // 가장 다가오는 마감일 순으로 정렬
+  const sorted = [...goals].sort((a, b) => {
+    const aIso = goalPrimaryISO(a), bIso = goalPrimaryISO(b);
+    if (!aIso) return 1; if (!bIso) return -1;
+    return new Date(aIso) - new Date(bIso);
+  });
   
   list.innerHTML = '';
   sorted.forEach(goal => {
-    const dday = computeDDay(goal.deadline);
+    const primary = getPrimaryDeadline(goal);
+    const dday = primary ? computeDDay(primary.date) : { text: '날짜 미정', class: 'past' };
+    const ddayLabel = primary && primary.label ? primary.label : '';
     const progress = computeGoalProgress(goal);
     
     const card = document.createElement('div');
     card.className = 'goal-card';
     card.dataset.id = goal.id;
     
-    const deadlineDate = new Date(goal.deadline);
-    const dateStr = `${deadlineDate.getMonth()+1}/${deadlineDate.getDate()} ${String(deadlineDate.getHours()).padStart(2,'0')}:${String(deadlineDate.getMinutes()).padStart(2,'0')}`;
     const hasMcii = !!(goal.mciiPositive || goal.mciiObstacle || goal.mciiPlan);
+    const allDeadlines = getAllDeadlinesSorted(goal);
+    
+    // 다중 마감일이면 스트립으로 표시
+    let stripHTML = '';
+    if (allDeadlines.length >= 2) {
+      const today = new Date(toLocalDateStr(new Date()) + 'T00:00:00');
+      const items = allDeadlines.map(d => {
+        const dt = new Date(d.date);
+        const dtStr = toLocalDateStr(dt);
+        const dt0 = new Date(dtStr + 'T00:00:00');
+        const past = dt0 < today;
+        const isPrimary = primary && d.id === primary.id;
+        const cls = past ? 'past' : (isPrimary ? 'upcoming-next' : '');
+        const ds = `${dt.getMonth()+1}/${dt.getDate()}`;
+        return `<span class="goal-dl-item ${cls}"><span class="dl-label">${escapeHtml(d.label || '마감')}</span><span class="dl-date">${ds}</span></span>`;
+      }).join('<span class="goal-dl-sep">·</span>');
+      stripHTML = `<div class="goal-deadlines-strip">${items}</div>`;
+    }
+    
+    // D-day 뱃지: 라벨까지 같이 (다중 마감 시 어느 게 가장 가까운지)
+    const ddayBadge = ddayLabel
+      ? `${dday.text} · ${escapeHtml(ddayLabel)}`
+      : dday.text;
     
     card.innerHTML = `
       <div class="goal-card-head">
         <div class="goal-title">${escapeHtml(goal.label)}${hasMcii ? ' <span style="font-size:11px;color:var(--indigo);" title="마음 준비 시나리오 설정됨">🧠</span>' : ''}</div>
-        <div class="goal-dday ${dday.class}">${dday.text}</div>
+        <div class="goal-dday ${dday.class}">${ddayBadge}</div>
       </div>
-      <div class="goal-tasks-count">📅 ${dateStr} 마감 · ${goal.tasks ? goal.tasks.length : 0}개 일정 · 총 ${progress.total}회</div>
+      ${stripHTML}
+      <div class="goal-tasks-count">${goal.tasks ? goal.tasks.length : 0}개 일정 · 총 ${progress.total}회</div>
       <div class="goal-progress">
         <div class="goal-progress-bar">
           <div class="goal-progress-fill" style="width:${progress.percent}%; background:${progressColor(progress.percent/100)}"></div>
@@ -3610,8 +3913,11 @@ function renderItems() {
     if (entry.fromGoalId) {
       const goal = findGoal(entry.fromGoalId);
       if (goal) {
-        const dday = computeDDay(goal.deadline);
-        chips.push(`<div class="meta-chip from-goal">${icon('target', 10)} ${dday.text}</div>`);
+        const pIso = goalPrimaryISO(goal);
+        if (pIso) {
+          const dday = computeDDay(pIso);
+          chips.push(`<div class="meta-chip from-goal">${icon('target', 10)} ${dday.text}</div>`);
+        }
       }
     }
     if (entry.pinned && entry.days && !entry.days.includes('all') && !entry.fromGoalId) {
@@ -3649,14 +3955,19 @@ function renderItems() {
     if (entry.fromGoalId) {
       const goal = findGoal(entry.fromGoalId);
       if (goal) {
-        const dday = computeDDay(goal.deadline);
-        // D-Day 7일 이내면 마이크로카피
-        if (dday.days >= 0 && dday.days <= 7) {
-          bodyParts.push(`<div class="dday-microcopy">⏳ 마지막 ${dday.days === 0 ? '오늘' : dday.days + '일'}이 가장 중요해요. 막판 가속이 차이를 만듭니다. (Goal Gradient · Hull 1934)</div>`);
-        }
-        // MCII plan
-        if (goal.mciiPlan && goal.mciiPlan.trim()) {
-          bodyParts.push(`<div class="item-mcii-inline">🧠 <b>장애물 대응:</b> ${escapeHtml(goal.mciiPlan)}</div>`);
+        const pIso = goalPrimaryISO(goal);
+        if (pIso) {
+          const dday = computeDDay(pIso);
+          const primary = getPrimaryDeadline(goal);
+          const labelStr = primary && primary.label ? ` (${primary.label})` : '';
+          // D-Day 7일 이내면 마이크로카피
+          if (dday.days >= 0 && dday.days <= 7) {
+            bodyParts.push(`<div class="dday-microcopy">⏳ 마지막 ${dday.days === 0 ? '오늘' : dday.days + '일'}이 가장 중요해요${labelStr}. 막판 가속이 차이를 만듭니다. (Goal Gradient · Hull 1934)</div>`);
+          }
+          // MCII plan
+          if (goal.mciiPlan && goal.mciiPlan.trim()) {
+            bodyParts.push(`<div class="item-mcii-inline">🧠 <b>장애물 대응:</b> ${escapeHtml(goal.mciiPlan)}</div>`);
+          }
         }
       }
     }
@@ -4617,10 +4928,10 @@ function openGoalModal(editingId) {
     if (!goal) return;
     document.getElementById('gLabel').value = goal.label;
     
-    // datetime-local 포맷: YYYY-MM-DDTHH:MM
-    const d = new Date(goal.deadline);
-    const dStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}T${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
-    document.getElementById('gDeadline').value = dStr;
+    // 다중 마감일 — 기존 deadlines 복사
+    goalModalState.deadlines = (goal.deadlines && goal.deadlines.length > 0)
+      ? goal.deadlines.map(d => ({...d}))
+      : (goal.deadline ? [{ id: makeDeadlineId(), label: '마감', date: goal.deadline }] : []);
     
     goalModalState.tasks = (goal.tasks || []).map(t => ({...t}));
     document.getElementById('gMciiPositive').value = goal.mciiPositive || '';
@@ -4634,12 +4945,11 @@ function openGoalModal(editingId) {
     document.getElementById('goalDeleteBtn').style.display = 'block';
   } else {
     document.getElementById('gLabel').value = '';
-    // 기본 마감일: 1주일 뒤 23:59
+    // 기본 마감일: 1주일 뒤 23:59 (1개 미리 추가)
     const next = new Date();
     next.setDate(next.getDate() + 7);
-    next.setHours(23, 59, 0, 0);
-    const dStr = `${next.getFullYear()}-${String(next.getMonth()+1).padStart(2,'0')}-${String(next.getDate()).padStart(2,'0')}T${String(next.getHours()).padStart(2,'0')}:${String(next.getMinutes()).padStart(2,'0')}`;
-    document.getElementById('gDeadline').value = dStr;
+    const defaultDate = `${next.getFullYear()}-${String(next.getMonth()+1).padStart(2,'0')}-${String(next.getDate()).padStart(2,'0')}T23:59`;
+    goalModalState.deadlines = [{ id: makeDeadlineId(), label: '마감', date: defaultDate }];
     goalModalState.tasks = [];
     document.getElementById('gMciiPositive').value = '';
     document.getElementById('gMciiObstacle').value = '';
@@ -4647,16 +4957,84 @@ function openGoalModal(editingId) {
     document.getElementById('goalModalTitle').textContent = '새 장기 목표';
     document.getElementById('goalDeleteBtn').style.display = 'none';
   }
+  renderDeadlineList();
   renderTaskList();
-  renderDeadlineSuggestions();
   document.getElementById('goalModal').classList.add('open');
   setTimeout(() => document.getElementById('gLabel').focus(), 100);
+}
+
+function makeDeadlineId() {
+  return 'd_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
 }
 
 function closeGoalModal() {
   document.getElementById('goalModal').classList.remove('open');
   goalModalState.editingId = null;
   goalModalState.tasks = [];
+  goalModalState.deadlines = [];
+}
+
+// 다중 마감일 리스트 렌더
+function renderDeadlineList() {
+  const list = document.getElementById('deadlineList');
+  if (!list) return;
+  if (goalModalState.deadlines.length === 0) {
+    list.innerHTML = '<div class="empty-state compact">날짜가 없습니다. 아래 + 버튼으로 추가</div>';
+    return;
+  }
+  list.innerHTML = '';
+  goalModalState.deadlines.forEach((d, idx) => {
+    const row = document.createElement('div');
+    row.className = 'deadline-row';
+    // datetime-local 포맷팅
+    let dateVal = d.date || '';
+    if (dateVal && !dateVal.includes('T')) {
+      dateVal = dateVal + 'T23:59';
+    } else if (dateVal) {
+      const dt = new Date(dateVal);
+      if (!isNaN(dt.getTime())) {
+        dateVal = `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}T${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
+      }
+    }
+    // 라이브 D-day
+    let ddayHTML = '';
+    if (d.date) {
+      const dd = computeDDay(d.date);
+      ddayHTML = `<span class="deadline-dday-mini ${dd.class}">${dd.text}</span>`;
+    }
+    row.innerHTML = `
+      <input type="text" class="deadline-label-input" placeholder="라벨 (예: 시험, 지원 마감)" 
+             value="${escapeHtml(d.label || '')}" data-dl-label="${idx}" maxlength="20">
+      <input type="datetime-local" class="deadline-date-input" 
+             value="${dateVal}" data-dl-date="${idx}">
+      ${ddayHTML}
+      <button class="deadline-delete-btn" data-dl-delete="${idx}" title="삭제">${icon('x', 14)}</button>
+    `;
+    list.appendChild(row);
+  });
+}
+
+function addDeadline() {
+  const next = new Date();
+  next.setDate(next.getDate() + 7);
+  const def = `${next.getFullYear()}-${String(next.getMonth()+1).padStart(2,'0')}-${String(next.getDate()).padStart(2,'0')}T23:59`;
+  // 기존 라벨 중 가장 많이 쓴 라벨 추정해서 자동 채우기? 아니, 빈 칸이 더 자연스러움
+  goalModalState.deadlines.push({
+    id: makeDeadlineId(),
+    label: '',
+    date: def,
+  });
+  renderDeadlineList();
+  // 새로 추가된 행의 label에 포커스
+  setTimeout(() => {
+    const inputs = document.querySelectorAll('#deadlineList .deadline-label-input');
+    if (inputs.length) inputs[inputs.length - 1].focus();
+  }, 50);
+}
+
+function deleteDeadline(idx) {
+  goalModalState.deadlines.splice(idx, 1);
+  renderDeadlineList();
 }
 
 // 마감일 Fresh Start 추천 (다음 월요일 / 1일 / 분기 시작)
@@ -4704,24 +5082,48 @@ function renderTaskList() {
     list.innerHTML = '<div class="empty-state compact">아직 일정이 없습니다. 아래 + 버튼으로 추가하세요</div>';
     return;
   }
+  const dayLabels = ['일','월','화','수','목','금','토'];
   goalModalState.tasks.forEach((task, idx) => {
     const row = document.createElement('div');
     row.className = 'task-row';
+    const mode = task.mode || 'weekly';
     
-    const dayOptions = ['일','월','화','수','목','금','토'];
-    const currentDay = task.days && task.days.length > 0 && task.days[0] !== 'all' 
-                      ? (typeof task.days[0] === 'string' ? parseInt(task.days[0],10) : task.days[0]) 
-                      : 1;
+    // 요일 칩: 다중 선택 가능
+    const selectedDays = (task.days || []).map(d => 
+      typeof d === 'string' && d !== 'all' ? parseInt(d, 10) : d
+    ).filter(d => typeof d === 'number');
+    
+    // 날짜 모드의 D-day 표시
+    let ddayHTML = '';
+    if (mode === 'date' && task.date) {
+      const dd = computeDDay(new Date(task.date + 'T23:59:59').toISOString());
+      ddayHTML = `<div class="task-date-dday ${dd.class}">${dd.text}</div>`;
+    }
+    
+    const dayChips = dayLabels.map((label, i) => {
+      const cls = (i === 0 ? 'sun' : i === 6 ? 'sat' : '') + (selectedDays.includes(i) ? ' on' : '');
+      return `<button type="button" class="task-day-pick ${cls}" data-task-day="${idx}:${i}">${label}</button>`;
+    }).join('');
     
     row.innerHTML = `
-      <select class="task-day-select" data-idx="${idx}">
-        ${dayOptions.map((d,i) => `<option value="${i}" ${i === currentDay ? 'selected' : ''}>${d}</option>`).join('')}
-      </select>
-      <input type="text" class="task-label-input" placeholder="작업 내용 (예: 아이디어 정리)" 
-             value="${escapeHtml(task.label || '')}" data-idx="${idx}" maxlength="40">
-      <input type="number" class="task-time-input" placeholder="분" 
-             value="${task.minutes || 60}" min="10" max="600" step="10" data-idx="${idx}">
-      <button class="task-delete-btn" data-task-delete="${idx}" title="삭제">${icon('x', 14)}</button>
+      <div class="task-row-top">
+        <input type="text" class="task-label-input" placeholder="작업 내용 (예: 단어 외우기 / 모의고사 / 지원 마감)" 
+               value="${escapeHtml(task.label || '')}" data-idx="${idx}" maxlength="40">
+        <input type="number" class="task-time-input" placeholder="60" 
+               value="${task.minutes || 60}" min="10" max="600" step="10" data-idx="${idx}" title="목표 시간(분)">
+        <span class="task-time-suffix">분</span>
+        <button class="task-delete-btn" data-task-delete="${idx}" title="삭제">${icon('x', 14)}</button>
+      </div>
+      <div class="task-mode-tabs">
+        <button type="button" class="task-mode-tab ${mode === 'weekly' ? 'active' : ''}" data-task-mode="${idx}:weekly">${icon('refresh', 11)}매주 반복</button>
+        <button type="button" class="task-mode-tab ${mode === 'date' ? 'active' : ''}" data-task-mode="${idx}:date">${icon('target', 11)}특정 날짜</button>
+      </div>
+      ${mode === 'weekly' 
+        ? `<div class="task-day-grid">${dayChips}</div>`
+        : `<div class="task-date-row">
+             <input type="date" class="task-date-input" value="${task.date || ''}" data-task-date="${idx}">
+             ${ddayHTML}
+           </div>`}
     `;
     list.appendChild(row);
   });
@@ -4732,7 +5134,9 @@ function addTask() {
     id: 't_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 4),
     label: '',
     minutes: 60,
+    mode: 'weekly',
     days: [1], // 월요일 기본
+    date: '',  // 날짜 모드일 때만 사용
   });
   renderTaskList();
   // 새로 추가된 행의 label에 포커스
@@ -4750,38 +5154,65 @@ function deleteTask(idx) {
 function saveGoal() {
   const label = document.getElementById('gLabel').value.trim();
   if (!label) { showToast('목표 이름을 입력해주세요'); return; }
-  const deadline = document.getElementById('gDeadline').value;
-  if (!deadline) { showToast('마감일을 설정해주세요'); return; }
+  
+  // 다중 마감일 — 라벨/날짜 둘 다 있어야 유효 (라벨 비면 자동 '마감')
+  const validDeadlines = [];
+  goalModalState.deadlines.forEach(d => {
+    if (!d.date) return;
+    validDeadlines.push({
+      id: d.id || makeDeadlineId(),
+      label: (d.label || '').trim() || '마감',
+      date: new Date(d.date).toISOString(),
+    });
+  });
+  if (validDeadlines.length === 0) { showToast('주요 날짜를 1개 이상 추가해주세요'); return; }
   
   const mciiPositive = document.getElementById('gMciiPositive').value.trim();
   const mciiObstacle = document.getElementById('gMciiObstacle').value.trim();
   const mciiPlan = document.getElementById('gMciiPlan').value.trim();
   
-  // task 빈 값 정리
-  const validTasks = goalModalState.tasks
-    .filter(t => t.label && t.label.trim())
-    .map(t => ({
+  // task 빈 값 정리 + 모드별 검증
+  const validTasks = [];
+  let invalidReason = '';
+  goalModalState.tasks.forEach(t => {
+    if (!t.label || !t.label.trim()) return; // 라벨 없으면 스킵
+    const mode = t.mode || 'weekly';
+    const base = {
       id: t.id,
       label: t.label.trim(),
       minutes: Math.max(10, Math.round((t.minutes || 60) / 10) * 10),
-      days: t.days || [1],
-    }));
+      mode,
+    };
+    if (mode === 'weekly') {
+      const days = (t.days || []).map(d => typeof d === 'string' ? parseInt(d,10) : d).filter(d => typeof d === 'number');
+      if (days.length === 0) { invalidReason = `'${t.label}': 요일을 1개 이상 선택해주세요`; return; }
+      validTasks.push({ ...base, days });
+    } else {
+      if (!t.date) { invalidReason = `'${t.label}': 날짜를 선택해주세요`; return; }
+      validTasks.push({ ...base, date: t.date });
+    }
+  });
+  if (invalidReason) { showToast(invalidReason); return; }
   
   if (goalModalState.editingId) {
     const goal = findGoal(goalModalState.editingId);
     if (goal) {
       goal.label = label;
-      goal.deadline = new Date(deadline).toISOString();
+      goal.deadlines = validDeadlines;
+      // 단일 deadline 필드는 backward compat용 (= 가장 마지막 날짜로)
+      goal.deadline = validDeadlines[validDeadlines.length - 1].date;
       goal.tasks = validTasks;
       goal.mciiPositive = mciiPositive;
       goal.mciiObstacle = mciiObstacle;
       goal.mciiPlan = mciiPlan;
     }
   } else {
+    const lastIso = validDeadlines[validDeadlines.length - 1].date;
     goals.push({
       id: goalUid(),
       label,
-      deadline: new Date(deadline).toISOString(),
+      deadlines: validDeadlines,
+      deadline: lastIso, // backward compat
       tasks: validTasks,
       mciiPositive, mciiObstacle, mciiPlan,
       createdAt: new Date().toISOString(),
@@ -5026,6 +5457,42 @@ function bindEvents() {
     if (e.target.id === 'goalModal') closeGoalModal();
   });
   document.getElementById('addTaskBtn').addEventListener('click', addTask);
+  document.getElementById('addDeadlineBtn').addEventListener('click', addDeadline);
+  
+  // 다중 마감일 — 리스트 내 변경/삭제 위임
+  document.getElementById('deadlineList').addEventListener('click', e => {
+    const del = e.target.closest('[data-dl-delete]');
+    if (del) {
+      const idx = parseInt(del.dataset.dlDelete, 10);
+      deleteDeadline(idx);
+    }
+  });
+  document.getElementById('deadlineList').addEventListener('input', e => {
+    const t = e.target;
+    if (t.dataset.dlLabel !== undefined) {
+      const idx = parseInt(t.dataset.dlLabel, 10);
+      if (goalModalState.deadlines[idx]) goalModalState.deadlines[idx].label = t.value;
+    } else if (t.dataset.dlDate !== undefined) {
+      const idx = parseInt(t.dataset.dlDate, 10);
+      if (goalModalState.deadlines[idx]) {
+        goalModalState.deadlines[idx].date = t.value;
+        // D-day 미니 뱃지만 즉시 갱신 (전체 리렌더 없이)
+        if (t.value) {
+          const row = t.closest('.deadline-row');
+          if (row) {
+            const dd = computeDDay(t.value);
+            let badge = row.querySelector('.deadline-dday-mini');
+            if (!badge) {
+              badge = document.createElement('span');
+              row.insertBefore(badge, row.querySelector('.deadline-delete-btn'));
+            }
+            badge.className = `deadline-dday-mini ${dd.class}`;
+            badge.textContent = dd.text;
+          }
+        }
+      }
+    }
+  });
   
   // MCII 섹션 펼치기/접기
   document.getElementById('mciiSummary').addEventListener('click', () => {
@@ -5189,45 +5656,83 @@ function bindEvents() {
   // ============== 14일 통계 PNG 익스포트 ==============
   document.getElementById('statsExportBtn').addEventListener('click', exportStatsPng);
 
-  // ============== 마감일 Fresh Start 추천 버튼 ==============
-  document.getElementById('deadlineSuggestions').addEventListener('click', e => {
-    const btn = e.target.closest('[data-deadline-set]');
-    if (!btn) return;
-    document.getElementById('gDeadline').value = btn.dataset.deadlineSet;
-    showToast('Fresh Start 날짜에 맞췄어요');
-  });
-  
   document.getElementById('taskList').addEventListener('click', e => {
-    const btn = e.target.closest('[data-task-delete]');
-    if (btn) {
-      deleteTask(parseInt(btn.dataset.taskDelete, 10));
+    const del = e.target.closest('[data-task-delete]');
+    if (del) {
+      deleteTask(parseInt(del.dataset.taskDelete, 10));
+      return;
+    }
+    // 모드 전환 (반복 / 날짜)
+    const modeBtn = e.target.closest('[data-task-mode]');
+    if (modeBtn) {
+      const [idxStr, mode] = modeBtn.dataset.taskMode.split(':');
+      const idx = parseInt(idxStr, 10);
+      if (goalModalState.tasks[idx]) {
+        goalModalState.tasks[idx].mode = mode;
+        // 모드 첫 전환 시 기본값 설정
+        if (mode === 'weekly' && (!goalModalState.tasks[idx].days || goalModalState.tasks[idx].days.length === 0)) {
+          goalModalState.tasks[idx].days = [1];
+        }
+        if (mode === 'date' && !goalModalState.tasks[idx].date) {
+          // 기본: 일주일 뒤
+          const d = new Date(); d.setDate(d.getDate() + 7);
+          goalModalState.tasks[idx].date = toLocalDateStr(d);
+        }
+        renderTaskList();
+      }
+      return;
+    }
+    // 요일 칩 토글 (다중 선택)
+    const dayBtn = e.target.closest('[data-task-day]');
+    if (dayBtn) {
+      const [idxStr, dayStr] = dayBtn.dataset.taskDay.split(':');
+      const idx = parseInt(idxStr, 10);
+      const day = parseInt(dayStr, 10);
+      const task = goalModalState.tasks[idx];
+      if (!task) return;
+      const days = (task.days || []).map(d => typeof d === 'string' ? parseInt(d,10) : d).filter(d => typeof d === 'number');
+      const pos = days.indexOf(day);
+      if (pos >= 0) days.splice(pos, 1);
+      else days.push(day);
+      days.sort((a,b) => a-b);
+      task.days = days;
+      // 요일 0개면 시각적 피드백을 위해 다시 그리기만, 저장 시 검증
+      renderTaskList();
+      return;
     }
   });
   
   document.getElementById('taskList').addEventListener('input', e => {
     const t = e.target;
     const idx = parseInt(t.dataset.idx, 10);
-    if (isNaN(idx) || !goalModalState.tasks[idx]) return;
-    
-    if (t.classList.contains('task-label-input')) {
-      goalModalState.tasks[idx].label = t.value;
-    } else if (t.classList.contains('task-time-input')) {
-      goalModalState.tasks[idx].minutes = parseInt(t.value, 10) || 60;
+    if (!isNaN(idx) && goalModalState.tasks[idx]) {
+      if (t.classList.contains('task-label-input')) {
+        goalModalState.tasks[idx].label = t.value;
+        return;
+      } else if (t.classList.contains('task-time-input')) {
+        goalModalState.tasks[idx].minutes = parseInt(t.value, 10) || 60;
+        return;
+      }
+    }
+    // 날짜 입력
+    const dateIdx = parseInt(t.dataset.taskDate, 10);
+    if (!isNaN(dateIdx) && goalModalState.tasks[dateIdx]) {
+      goalModalState.tasks[dateIdx].date = t.value;
+      // D-day 칩 업데이트 위해 다시 그리기
+      renderTaskList();
     }
   });
   
   document.getElementById('taskList').addEventListener('change', e => {
     const t = e.target;
     const idx = parseInt(t.dataset.idx, 10);
-    if (isNaN(idx) || !goalModalState.tasks[idx]) return;
-    
-    if (t.classList.contains('task-day-select')) {
-      goalModalState.tasks[idx].days = [parseInt(t.value, 10)];
-    } else if (t.classList.contains('task-time-input')) {
-      let v = parseInt(t.value, 10) || 60;
-      v = Math.max(10, Math.round(v / 10) * 10);
-      t.value = v;
-      goalModalState.tasks[idx].minutes = v;
+    if (!isNaN(idx) && goalModalState.tasks[idx]) {
+      if (t.classList.contains('task-time-input')) {
+        let v = parseInt(t.value, 10) || 60;
+        v = Math.max(10, Math.round(v / 10) * 10);
+        t.value = v;
+        goalModalState.tasks[idx].minutes = v;
+      }
     }
   });
   
