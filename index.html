@@ -1543,6 +1543,226 @@
   .goal-dl-item.past .dl-date { color: var(--text-muted); text-decoration: line-through; }
   .goal-dl-sep { color: var(--text-muted); opacity: 0.5; }
 
+  /* ============ 세부 목표 트리 (Subgoals) — 모달 편집기 ============ */
+  .subgoal-tree {
+    display: flex; flex-direction: column;
+    gap: 4px;
+    margin-top: 4px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px;
+    max-height: 360px;
+    overflow-y: auto;
+  }
+  .subgoal-tree:empty::after {
+    content: '아직 세부 목표가 없어요. 아래 + 버튼으로 추가하세요.';
+    display: block;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    padding: 12px;
+    font-weight: 500;
+  }
+  .subgoal-row {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 8px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    transition: border-color 0.15s;
+  }
+  .subgoal-row:hover { border-color: var(--border-strong); }
+  .subgoal-row.is-done { background: var(--bg-soft); }
+  .subgoal-row.is-done .subgoal-label-input { text-decoration: line-through; color: var(--text-muted); }
+  
+  .subgoal-children {
+    display: flex; flex-direction: column;
+    gap: 4px;
+    margin-top: 4px;
+    margin-left: 22px;
+    padding-left: 8px;
+    border-left: 2px solid var(--border);
+  }
+  
+  .subgoal-checkbox {
+    width: 18px; height: 18px;
+    border: 1.5px solid var(--border-strong);
+    border-radius: 4px;
+    background: var(--bg);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    color: transparent;
+    transition: all 0.15s;
+  }
+  .subgoal-checkbox:hover { border-color: var(--text-soft); }
+  .subgoal-checkbox.done {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+  .subgoal-checkbox.partial {
+    background: linear-gradient(to top, var(--accent) var(--fill, 50%), var(--bg) var(--fill, 50%));
+    border-color: var(--accent);
+  }
+  .subgoal-checkbox .ic { width: 12px; height: 12px; }
+  
+  .subgoal-label-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    padding: 3px 4px;
+    margin: -3px -4px;
+    border-radius: 4px;
+    min-width: 0;
+    transition: background 0.15s;
+  }
+  .subgoal-label-input:focus { background: var(--bg-soft); }
+  
+  .subgoal-progress-mini {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+    padding: 1px 6px;
+    background: var(--bg-soft);
+    border-radius: 8px;
+  }
+  
+  .subgoal-actions { display: flex; gap: 2px; flex-shrink: 0; }
+  .subgoal-action-btn {
+    background: transparent; border: none;
+    cursor: pointer;
+    width: 26px; height: 26px;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted);
+    transition: background 0.15s, color 0.15s;
+  }
+  .subgoal-action-btn:hover { background: var(--bg-hover); color: var(--text); }
+  .subgoal-action-btn.delete:hover { color: var(--warn); background: var(--warn-soft); }
+  .subgoal-action-btn .ic { width: 13px; height: 13px; }
+  
+  .add-subgoal-btn {
+    background: transparent; border: 1.5px dashed var(--border-strong);
+    color: var(--text-soft);
+    padding: 8px; border-radius: 6px;
+    font-family: inherit; font-size: 12px; font-weight: 600;
+    cursor: pointer; margin-top: 6px;
+    width: 100%;
+    display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .add-subgoal-btn .ic { width: 12px; height: 12px; }
+  .add-subgoal-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+  
+  .add-subchild-btn {
+    background: var(--bg-soft); border: 1px dashed var(--border-strong);
+    color: var(--text-muted);
+    padding: 4px 9px; border-radius: 5px;
+    font-family: inherit; font-size: 11px; font-weight: 600;
+    cursor: pointer;
+    margin-left: 22px;
+    margin-top: 2px;
+    display: inline-flex; align-items: center; gap: 4px;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .add-subchild-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .add-subchild-btn .ic { width: 10px; height: 10px; }
+
+  /* ============ 피라미드 시각화 (카드 안) ============ */
+  .goal-pyramid {
+    margin-top: 10px;
+    padding: 10px 8px 6px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex; flex-direction: column;
+  }
+  .pyramid-grid {
+    display: grid;
+    gap: 3px;
+    width: 100%;
+  }
+  .pyramid-row {
+    /* 더 이상 사용 안 함 — 잔여 호환용 */
+    display: contents;
+  }
+  .pyramid-cell {
+    position: relative;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg);
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.15s, transform 0.1s;
+    display: flex; align-items: center; justify-content: center;
+    min-width: 0; min-height: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .pyramid-cell:hover { border-color: var(--accent); }
+  .pyramid-cell:active { transform: scale(0.96); }
+  .pyramid-cell.leaf { border-color: var(--border); }
+  .pyramid-cell.leaf.done { background: var(--accent); border-color: var(--accent); }
+  .pyramid-cell.non-leaf {
+    background: linear-gradient(to top, var(--accent-soft) var(--fill, 0%), var(--bg) var(--fill, 0%));
+  }
+  .pyramid-cell.non-leaf.full {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+  }
+  .pyramid-cell.non-leaf.done {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .pyramid-cell.non-leaf.done .pyramid-cell-label { color: white; }
+  .pyramid-cell.root {
+    background: linear-gradient(to top, var(--accent) var(--fill, 0%), var(--bg) var(--fill, 0%));
+    border-width: 2px;
+    font-weight: 800;
+  }
+  .pyramid-cell.root.full {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .pyramid-cell-label {
+    position: relative;
+    z-index: 1;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--text);
+    padding: 0 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    pointer-events: none;
+    letter-spacing: -0.01em;
+  }
+  .pyramid-cell.root .pyramid-cell-label {
+    font-size: 11.5px;
+    font-weight: 800;
+  }
+  .pyramid-cell.root.full .pyramid-cell-label { color: white; }
+  .pyramid-cell.leaf.done .pyramid-cell-label { color: white; }
+  .pyramid-overall {
+    margin-top: 6px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-soft);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+  .pyramid-overall b { color: var(--accent); font-weight: 800; }
+
   /* ============ 작은 진전 하이라이트 (오늘 첫 진전) ============ */
   .first-progress-banner {
     background: var(--accent);
@@ -2032,33 +2252,11 @@
     </div>
     
     <div class="field-group">
-      <label class="field-label">세부 일정 <span style="color:var(--text-muted);font-weight:400;">(요일별 작업, 자동으로 트래커에 추가됨)</span></label>
-      <div class="task-list" id="taskList"></div>
-      <button class="add-task-btn" id="addTaskBtn">+ 일정 추가</button>
+      <label class="field-label">세부 목표 <span style="color:var(--text-muted);font-weight:400;">(쪼개고, 또 쪼갤 수 있음 — 무한 중첩)</span></label>
+      <div class="subgoal-tree" id="subgoalTree"></div>
+      <button class="add-subgoal-btn" id="addRootSubgoalBtn" data-icon-before="plus">세부 목표 추가</button>
     </div>
 
-    <!-- MCII: Mental Contrasting + Implementation Intentions (Oettingen) -->
-    <div class="mcii-section" id="mciiSection">
-      <div class="mcii-summary" id="mciiSummary">🧠 마음 준비 (선택) — 장애물 대비 시나리오</div>
-      <div class="mcii-body">
-        <div class="mcii-field">
-          <label class="mcii-field-label">1. 이 목표를 이루면 가장 좋을 모습은?</label>
-          <textarea class="mcii-field-input" id="gMciiPositive" rows="2"
-                    placeholder="예: 발표 끝나고 박수받으며 안도하는 나"></textarea>
-        </div>
-        <div class="mcii-field">
-          <label class="mcii-field-label">2. 그 길에서 가장 큰 장애물은?</label>
-          <textarea class="mcii-field-input" id="gMciiObstacle" rows="2"
-                    placeholder="예: 마감 직전 새로운 일이 들어와 미루게 됨"></textarea>
-        </div>
-        <div class="mcii-field">
-          <label class="mcii-field-label">3. 그 장애물을 만나면 어떻게 대응할까? (만약 ___ 라면, 나는 ___ 한다)</label>
-          <textarea class="mcii-field-input" id="gMciiPlan" rows="2"
-                    placeholder="예: 만약 새로운 일이 들어오면, 나는 캘린더에 마감 작업부터 블록해둔다"></textarea>
-        </div>
-      </div>
-    </div>
-    
     <div class="modal-actions">
       <button class="btn btn-danger" id="goalDeleteBtn" style="display:none;">삭제</button>
       <button class="btn" id="goalCancel">취소</button>
@@ -2461,8 +2659,152 @@ function migrateGoal(g) {
       g.deadlines = [];
     }
   }
-  // 옛 데이터 정리: deadline 필드는 backward-read 용으로 유지하되, 갱신은 안 함
+  // tasks → subgoals 마이그레이션 (요일 자동주입 시스템 → 트리 시스템)
+  if (!Array.isArray(g.subgoals)) {
+    g.subgoals = [];
+    if (Array.isArray(g.tasks)) {
+      g.subgoals = g.tasks.map(t => ({
+        id: makeSubgoalId(),
+        label: t.label || '세부 목표',
+        done: false,
+        subgoals: [],
+      }));
+    }
+  }
+  // 모든 자식 노드에도 subgoals 배열·id·done 필드 보장 (재귀 정규화)
+  function normalizeNode(n) {
+    if (!n) return;
+    if (typeof n.id !== 'string') n.id = makeSubgoalId();
+    if (typeof n.done !== 'boolean') n.done = !!n.done;
+    if (typeof n.label !== 'string') n.label = String(n.label || '');
+    if (!Array.isArray(n.subgoals)) n.subgoals = [];
+    n.subgoals.forEach(normalizeNode);
+  }
+  g.subgoals.forEach(normalizeNode);
   return g;
+}
+
+// ============== 세부 목표 (Subgoals) 트리 ==============
+function makeSubgoalId() {
+  return 's_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+
+// 트리 순회 (콜백: (node, parent, depth))
+function walkSubgoalTree(node, callback, parent = null, depth = 0) {
+  if (!node) return;
+  if (parent !== null) callback(node, parent, depth);
+  if (Array.isArray(node.subgoals)) {
+    node.subgoals.forEach(child => walkSubgoalTree(child, callback, node, depth + 1));
+  }
+}
+
+// 노드의 leaf 개수 (자기 자신이 leaf면 1) — 시각화 컬럼 매핑용
+function countLeavesIn(node) {
+  if (!node) return 0;
+  if (!Array.isArray(node.subgoals) || node.subgoals.length === 0) return 1;
+  return node.subgoals.reduce((sum, c) => sum + countLeavesIn(c), 0);
+}
+
+// 모든 후손 노드 개수 (자기 자신 제외) — 진행률 계산용
+function countAllSubNodes(node) {
+  if (!node || !Array.isArray(node.subgoals)) return 0;
+  let n = 0;
+  node.subgoals.forEach(c => {
+    n++;
+    n += countAllSubNodes(c);
+  });
+  return n;
+}
+
+// 후손 중 done 개수
+function countDoneSubNodes(node) {
+  if (!node || !Array.isArray(node.subgoals)) return 0;
+  let n = 0;
+  node.subgoals.forEach(c => {
+    if (c.done) n++;
+    n += countDoneSubNodes(c);
+  });
+  return n;
+}
+
+// 진행률 0~1 — 후손 done 비율 (동등 가중치). leaf인 경우는 자기 done.
+function subgoalProgress(node) {
+  const total = countAllSubNodes(node);
+  if (total === 0) return node.done ? 1 : 0;
+  return countDoneSubNodes(node) / total;
+}
+
+// (legacy 호환용 — 더 이상 진행률 계산에 사용 안 함)
+function countDoneLeavesIn(node) {
+  if (!node) return 0;
+  if (!Array.isArray(node.subgoals) || node.subgoals.length === 0) return node.done ? 1 : 0;
+  return node.subgoals.reduce((sum, c) => sum + countDoneLeavesIn(c), 0);
+}
+
+// 트리 깊이 (자기 자신 포함 1, 자식 있으면 2+)
+function subgoalDepth(node) {
+  if (!node) return 0;
+  if (!Array.isArray(node.subgoals) || node.subgoals.length === 0) return 1;
+  return 1 + Math.max(...node.subgoals.map(subgoalDepth));
+}
+
+// ID로 노드 찾기
+function findSubgoalById(root, id) {
+  if (!root) return null;
+  if (root.id === id) return root;
+  if (Array.isArray(root.subgoals)) {
+    for (const c of root.subgoals) {
+      const f = findSubgoalById(c, id);
+      if (f) return f;
+    }
+  }
+  return null;
+}
+
+// ID로 노드 + 부모 찾기
+function findSubgoalWithParent(root, id) {
+  if (!root || !Array.isArray(root.subgoals)) return null;
+  for (const c of root.subgoals) {
+    if (c.id === id) return { node: c, parent: root };
+    const f = findSubgoalWithParent(c, id);
+    if (f) return f;
+  }
+  return null;
+}
+
+// 세부 목표 추가 (parent에 자식으로)
+function addSubgoalTo(parent, label) {
+  if (!Array.isArray(parent.subgoals)) parent.subgoals = [];
+  const sg = {
+    id: makeSubgoalId(),
+    label: (label || '').trim(),
+    done: false,
+    subgoals: [],
+  };
+  parent.subgoals.push(sg);
+  return sg;
+}
+
+// 세부 목표 삭제 (전체 서브트리)
+function deleteSubgoalById(root, id) {
+  if (!root || !Array.isArray(root.subgoals)) return false;
+  const idx = root.subgoals.findIndex(c => c.id === id);
+  if (idx !== -1) {
+    root.subgoals.splice(idx, 1);
+    return true;
+  }
+  for (const c of root.subgoals) {
+    if (deleteSubgoalById(c, id)) return true;
+  }
+  return false;
+}
+
+// 모든 노드 자기 done만 토글 (자식 propagate 없음, leaf든 non-leaf든 동일)
+function toggleSubgoalDone(root, id) {
+  const node = findSubgoalById(root, id);
+  if (!node) return false;
+  node.done = !node.done;
+  return true;
 }
 
 // 다중 마감일 헬퍼
@@ -2988,57 +3330,10 @@ function scheduleAutoSave() {
 }
 
 // ============== 장기 목표 동기화 ==============
-// 장기 목표의 tasks를 entries에 반영
+// 더 이상 장기목표의 세부 항목을 오늘의 트래커에 자동 주입하지 않음 (트리 시스템으로 이전)
+// 기존에 주입된 fromGoalId 항목은 청소만 한다.
 function syncGoalTasksToEntries() {
-  // 1. 기존 fromGoalId 가진 항목 제거 (사용자가 직접 만든 건 보존)
   entries = entries.filter(e => !e.fromGoalId);
-  
-  // 2. 활성 목표(마감 안 지난)의 task들을 항목으로 추가
-  const today = new Date(currentDate + 'T00:00:00');
-  
-  goals.forEach(goal => {
-    const lastIso = goalLastISO(goal);
-    if (!lastIso) return; // 마감일이 하나도 없으면 스킵
-    const lastDeadline = new Date(lastIso);
-    if (lastDeadline < today) return; // 마지막 마감도 지난 목표는 스킵
-    
-    if (!goal.tasks || goal.tasks.length === 0) return;
-    
-    goal.tasks.forEach(task => {
-      // 모드별 적용 여부 판단
-      const mode = task.mode || 'weekly';
-      let applies = false;
-      if (mode === 'date') {
-        // 특정 날짜: 오늘이 그 날짜일 때만 주입
-        const todayStr = toLocalDateStr(today);
-        applies = (task.date === todayStr);
-      } else {
-        // 매주 반복: 오늘 요일이 task.days에 포함되면 주입
-        const todayDayIdx = today.getDay();
-        const taskDays = task.days || [];
-        applies = taskDays.includes('all') || 
-                  taskDays.some(d => (typeof d === 'string' ? parseInt(d,10) : d) === todayDayIdx);
-      }
-      if (!applies) return;
-      
-      // 해당 날짜 저장된 데이터에서 진행 상황 확인
-      const taskEntryId = `goaltask_${goal.id}_${task.id}`;
-      const savedEntry = findEntryByGoalTask(goal.id, task.id);
-      
-      entries.push({
-        id: taskEntryId,
-        label: `[${goal.label}] ${task.label}`,
-        types: ['check'],
-        values: savedEntry ? savedEntry.values : {},
-        pinned: true,
-        days: task.days || ['all'],
-        alarm: '',
-        goalMinutes: task.minutes || 60,
-        fromGoalId: goal.id,
-        fromTaskId: task.id,
-      });
-    });
-  });
 }
 
 function findEntryByGoalTask(goalId, taskId) {
@@ -3052,109 +3347,14 @@ function findEntryByGoalTask(goalId, taskId) {
 // 장기 목표의 전체 진행률 계산
 // 생성일 ~ 마감일까지 전체 일정 인스턴스 대비, 완료한 비율
 function computeGoalProgress(goal) {
-  if (!goal.tasks || goal.tasks.length === 0) return { total: 0, done: 0, percent: 0 };
-  
-  let totalSessions = 0;
-  let doneSum = 0;
-  
-  // 오늘 (로컬 시간대 자정 기준)
-  const todayStr = toLocalDateStr(new Date());
-  const today = new Date(todayStr + 'T00:00:00');
-  
-  // 마감일 (로컬 시간대 자정 기준) — 다중 마감 중 가장 마지막
-  const lastIso = goalLastISO(goal) || goal.deadline;
-  if (!lastIso) return { done: 0, total: 0, percent: 0, daysLeft: 0 };
-  const deadlineDate = new Date(lastIso);
-  const deadlineStr = toLocalDateStr(deadlineDate);
-  const deadline = new Date(deadlineStr + 'T00:00:00');
-  
-  // 생성일 (로컬 시간대 자정 기준)
-  const createdDate = new Date(goal.createdAt || lastIso);
-  const createdStr = toLocalDateStr(createdDate);
-  const created = new Date(createdStr + 'T00:00:00');
-  
-  // 시작일: 생성일과 오늘 중 더 이른 날
-  const startDate = created <= today ? created : today;
-  // 끝일: 마감일까지 모두 본다 (전체 진행률)
-  const endCheck = deadline;
-  
-  goal.tasks.forEach(task => {
-    const mode = task.mode || 'weekly';
-    const taskGoalMin = task.minutes || 60;
-    
-    // 특정 날짜 모드: 단일 세션 카운트
-    if (mode === 'date') {
-      if (!task.date) return;
-      const taskDateStr = task.date;
-      const taskDate = new Date(taskDateStr + 'T00:00:00');
-      // 마감일 이후 또는 시작일 이전 날짜는 카운트 안 함
-      if (taskDate < startDate || taskDate > endCheck) return;
-      totalSessions++;
-      // 진행 데이터 확인
-      let entryData = null;
-      if (taskDateStr === currentDate) {
-        entryData = entries.find(x => x.fromGoalId === goal.id && x.fromTaskId === task.id);
-      }
-      if (!entryData) {
-        const data = loadGrowth(taskDateStr);
-        if (data && data.entries) {
-          entryData = data.entries.find(x => x.fromGoalId === goal.id && x.fromTaskId === task.id);
-        }
-      }
-      if (entryData && entryData.values) {
-        const actual = entryData.values.actualMinutes || 0;
-        if (entryData.values.check === true || entryData.values.check === 'true') {
-          doneSum += 1;
-        } else if (actual > 0) {
-          doneSum += Math.min(1, actual / taskGoalMin);
-        }
-      }
-      return;
-    }
-    
-    // 매주 반복 모드
-    const taskDays = task.days || ['all'];
-    
-    let cursor = new Date(startDate);
-    
-    while (cursor <= endCheck) {
-      const cursorDay = cursor.getDay();
-      const applies = taskDays.includes('all') || 
-                     taskDays.some(d => (typeof d === 'string' ? parseInt(d,10) : d) === cursorDay);
-      
-      if (applies) {
-        totalSessions++;
-        const dateStr = toLocalDateStr(cursor);
-        
-        // 오늘 데이터는 메모리(entries)에서 우선 찾기
-        let entryData = null;
-        if (dateStr === currentDate) {
-          entryData = entries.find(x => x.fromGoalId === goal.id && x.fromTaskId === task.id);
-        }
-        if (!entryData) {
-          const data = loadGrowth(dateStr);
-          if (data && data.entries) {
-            entryData = data.entries.find(x => x.fromGoalId === goal.id && x.fromTaskId === task.id);
-          }
-        }
-        
-        if (entryData && entryData.values) {
-          const actual = entryData.values.actualMinutes || 0;
-          if (entryData.values.check === true || entryData.values.check === 'true') {
-            doneSum += 1;
-          } else if (actual > 0) {
-            doneSum += Math.min(1, actual / taskGoalMin);
-          }
-        }
-      }
-      cursor.setDate(cursor.getDate() + 1);
-    }
-  });
-  
+  // 새 모델: 모든 후손 노드 (자기 제외) 중 done 비율 — 동등 가중치
+  const total = countAllSubNodes(goal);
+  if (total === 0) return { total: 0, done: 0, percent: 0 };
+  const done = countDoneSubNodes(goal);
   return {
-    total: totalSessions,
-    done: Math.round(doneSum * 10) / 10,
-    percent: totalSessions > 0 ? Math.round((doneSum / totalSessions) * 100) : 0,
+    total,
+    done,
+    percent: Math.round((done / total) * 100),
   };
 }
 
@@ -3724,56 +3924,164 @@ function renderGoals() {
   
   list.innerHTML = '';
   sorted.forEach(goal => {
-    const primary = getPrimaryDeadline(goal);
-    const dday = primary ? computeDDay(primary.date) : { text: '날짜 미정', class: 'past' };
-    const ddayLabel = primary && primary.label ? primary.label : '';
-    const progress = computeGoalProgress(goal);
-    
-    const card = document.createElement('div');
-    card.className = 'goal-card';
-    card.dataset.id = goal.id;
-    
-    const hasMcii = !!(goal.mciiPositive || goal.mciiObstacle || goal.mciiPlan);
-    const allDeadlines = getAllDeadlinesSorted(goal);
-    
-    // 다중 마감일이면 스트립으로 표시
-    let stripHTML = '';
-    if (allDeadlines.length >= 2) {
-      const today = new Date(toLocalDateStr(new Date()) + 'T00:00:00');
-      const items = allDeadlines.map(d => {
-        const dt = new Date(d.date);
-        const dtStr = toLocalDateStr(dt);
-        const dt0 = new Date(dtStr + 'T00:00:00');
-        const past = dt0 < today;
-        const isPrimary = primary && d.id === primary.id;
-        const cls = past ? 'past' : (isPrimary ? 'upcoming-next' : '');
-        const ds = `${dt.getMonth()+1}/${dt.getDate()}`;
-        return `<span class="goal-dl-item ${cls}"><span class="dl-label">${escapeHtml(d.label || '마감')}</span><span class="dl-date">${ds}</span></span>`;
-      }).join('<span class="goal-dl-sep">·</span>');
-      stripHTML = `<div class="goal-deadlines-strip">${items}</div>`;
-    }
-    
-    // D-day 뱃지: 라벨까지 같이 (다중 마감 시 어느 게 가장 가까운지)
-    const ddayBadge = ddayLabel
-      ? `${dday.text} · ${escapeHtml(ddayLabel)}`
-      : dday.text;
-    
-    card.innerHTML = `
-      <div class="goal-card-head">
-        <div class="goal-title">${escapeHtml(goal.label)}${hasMcii ? ' <span style="font-size:11px;color:var(--indigo);" title="마음 준비 시나리오 설정됨">🧠</span>' : ''}</div>
-        <div class="goal-dday ${dday.class}">${ddayBadge}</div>
-      </div>
-      ${stripHTML}
-      <div class="goal-tasks-count">${goal.tasks ? goal.tasks.length : 0}개 일정 · 총 ${progress.total}회</div>
-      <div class="goal-progress">
-        <div class="goal-progress-bar">
-          <div class="goal-progress-fill" style="width:${progress.percent}%; background:${progressColor(progress.percent/100)}"></div>
+    try {
+      const primary = getPrimaryDeadline(goal);
+      const dday = primary ? computeDDay(primary.date) : { text: '날짜 미정', class: 'past' };
+      const ddayLabel = primary && primary.label ? primary.label : '';
+      
+      const card = document.createElement('div');
+      card.className = 'goal-card';
+      card.dataset.id = goal.id;
+      
+      const allDeadlines = getAllDeadlinesSorted(goal);
+      
+      // 다중 마감일이면 스트립으로 표시
+      let stripHTML = '';
+      if (allDeadlines.length >= 2) {
+        const today = new Date(toLocalDateStr(new Date()) + 'T00:00:00');
+        const items = allDeadlines.map(d => {
+          const dt = new Date(d.date);
+          const dtStr = toLocalDateStr(dt);
+          const dt0 = new Date(dtStr + 'T00:00:00');
+          const past = dt0 < today;
+          const isPrimary = primary && d.id === primary.id;
+          const cls = past ? 'past' : (isPrimary ? 'upcoming-next' : '');
+          const ds = `${dt.getMonth()+1}/${dt.getDate()}`;
+          return `<span class="goal-dl-item ${cls}"><span class="dl-label">${escapeHtml(d.label || '마감')}</span><span class="dl-date">${ds}</span></span>`;
+        }).join('<span class="goal-dl-sep">·</span>');
+        stripHTML = `<div class="goal-deadlines-strip">${items}</div>`;
+      }
+      
+      // D-day 뱃지: 라벨까지 같이 (다중 마감 시 어느 게 가장 가까운지)
+      const ddayBadge = ddayLabel
+        ? `${dday.text} · ${escapeHtml(ddayLabel)}`
+        : dday.text;
+      
+      // 피라미드 시각화 — leaf 기반 트리
+      const pyramidHTML = renderGoalPyramid(goal);
+      
+      card.innerHTML = `
+        <div class="goal-card-head">
+          <div class="goal-title">${escapeHtml(goal.label)}</div>
+          <div class="goal-dday ${dday.class}">${ddayBadge}</div>
         </div>
-        <div class="goal-progress-text">${progress.done}/${progress.total} · ${progress.percent}%</div>
-      </div>
-    `;
-    list.appendChild(card);
+        ${stripHTML}
+        ${pyramidHTML}
+      `;
+      list.appendChild(card);
+    } catch (err) {
+      console.error('목표 카드 렌더 실패:', goal && goal.label, err);
+      // 실패한 카드는 에러 박스로 표시 (다른 카드는 살리기 위해)
+      const errCard = document.createElement('div');
+      errCard.className = 'goal-card';
+      errCard.innerHTML = `<div style="padding:10px; color:var(--warn); font-size:12px;">⚠ "${escapeHtml(goal && goal.label || '?')}" 렌더 실패: ${escapeHtml(err.message || '알 수 없음')}</div>`;
+      list.appendChild(errCard);
+    }
   });
+}
+
+// 목표 카드 피라미드: 각 leaf(체인 끝)가 한 column. 같은 부모를 공유하는 노드들은 column span.
+// 가장 깊은 체인이 총 row 수 결정. 더 얕은 체인은 자기 깊이까지만 보이고 그 아래는 빈 공간.
+function renderGoalPyramid(goal) {
+  const totalLeaves = countLeavesIn(goal);
+  if (totalLeaves === 0 || (goal.subgoals || []).length === 0) {
+    return `<div class="goal-pyramid">
+      <div class="empty-state compact" style="padding:8px;">세부 목표를 추가하면 피라미드로 진행이 보여요</div>
+    </div>`;
+  }
+  const overallProgress = subgoalProgress(goal);
+  
+  // 1. 각 노드에 column 범위 [start, end]와 depth 할당 (DFS)
+  let leafCounter = 0;
+  function assignLayout(node, depth) {
+    const isLeaf = !Array.isArray(node.subgoals) || node.subgoals.length === 0;
+    node._depth = depth;
+    if (isLeaf) {
+      leafCounter++;
+      node._col = [leafCounter, leafCounter];
+      return;
+    }
+    node.subgoals.forEach(c => assignLayout(c, depth + 1));
+    const firstChild = node.subgoals[0];
+    const lastChild = node.subgoals[node.subgoals.length - 1];
+    node._col = [firstChild._col[0], lastChild._col[1]];
+  }
+  assignLayout(goal, 0);
+  
+  // 2. 모든 노드 평탄화 수집
+  const allNodes = [{ node: goal, isRoot: true }];
+  function collect(node) {
+    if (!Array.isArray(node.subgoals)) return;
+    node.subgoals.forEach(c => {
+      allNodes.push({ node: c, isRoot: false });
+      collect(c);
+    });
+  }
+  collect(goal);
+  
+  // 3. 최대 depth → grid rows 결정
+  const maxDepth = Math.max(...allNodes.map(x => x.node._depth));
+  
+  // 4. 각 cell 렌더 (CSS Grid 위치 지정)
+  const cellsHTML = allNodes.map(({ node, isRoot }) => {
+    const isLeaf = !Array.isArray(node.subgoals) || node.subgoals.length === 0;
+    // fill 계산: root는 후손 진행률, 그 외는 자기 done이면 100, 아니면 후손 진행률
+    let fillPct;
+    if (isRoot) {
+      fillPct = Math.round(overallProgress * 100);
+    } else if (node.done) {
+      fillPct = 100;
+    } else {
+      fillPct = Math.round(subgoalProgress(node) * 100);
+    }
+    const isFull = fillPct >= 100;
+    const label = node.label || (isRoot ? '목표' : '');
+    const classes = [
+      'pyramid-cell',
+      isRoot ? 'root' : '',
+      isLeaf ? 'leaf' : 'non-leaf',
+      (isLeaf && node.done) ? 'done' : '',
+      (!isLeaf && !isRoot && node.done) ? 'done' : '',
+      (!isLeaf && isFull && !node.done) ? 'full' : '',
+      (isRoot && isFull) ? 'full' : '',
+    ].filter(Boolean).join(' ');
+    const styleParts = [
+      `grid-column: ${node._col[0]} / ${node._col[1] + 1}`,
+      `grid-row: ${node._depth + 1}`,
+    ];
+    if (!isLeaf || isRoot) styleParts.push(`--fill: ${fillPct}%`);
+    let title;
+    if (isLeaf) {
+      title = `${escapeHtml(label)} · ${node.done ? '완료' : '미완료'}`;
+    } else if (isRoot) {
+      title = `${escapeHtml(label)} · ${fillPct}% (${countDoneSubNodes(node)}/${countAllSubNodes(node)})`;
+    } else {
+      const subDone = countDoneSubNodes(node);
+      const subTotal = countAllSubNodes(node);
+      title = `${escapeHtml(label)} · ${node.done ? '완료' : (subTotal > 0 ? `자식 ${subDone}/${subTotal}` : '미완료')}`;
+    }
+    return `<button type="button" class="${classes}" style="${styleParts.join('; ')}" 
+                     data-goal-pyramid-cell="${node.id || 'root_' + goal.id}" 
+                     data-goal-id="${goal.id}"
+                     data-is-root="${isRoot ? '1' : '0'}"
+                     data-is-leaf="${isLeaf ? '1' : '0'}"
+                     title="${title}">
+      <span class="pyramid-cell-label">${escapeHtml(label)}</span>
+    </button>`;
+  }).join('');
+  
+  const overallPct = Math.round(overallProgress * 100);
+  const overallDone = countDoneSubNodes(goal);
+  const overallTotal = countAllSubNodes(goal);
+  
+  return `<div class="goal-pyramid" data-goal-id="${goal.id}">
+    <div class="pyramid-grid" 
+         style="grid-template-columns: repeat(${totalLeaves}, minmax(0, 1fr)); 
+                grid-auto-rows: 26px;">
+      ${cellsHTML}
+    </div>
+    <div class="pyramid-overall"><b>${overallPct}%</b> · ${overallDone}/${overallTotal}</div>
+  </div>`;
 }
 
 function renderSummary() {
@@ -3969,10 +4277,6 @@ function renderItems() {
           // D-Day 7일 이내면 마이크로카피
           if (dday.days >= 0 && dday.days <= 7) {
             bodyParts.push(`<div class="dday-microcopy">⏳ 마지막 ${dday.days === 0 ? '오늘' : dday.days + '일'}이 가장 중요해요${labelStr}. 막판 가속이 차이를 만듭니다. (Goal Gradient · Hull 1934)</div>`);
-          }
-          // MCII plan
-          if (goal.mciiPlan && goal.mciiPlan.trim()) {
-            bodyParts.push(`<div class="item-mcii-inline">🧠 <b>장애물 대응:</b> ${escapeHtml(goal.mciiPlan)}</div>`);
           }
         }
       }
@@ -4927,8 +5231,6 @@ function saveModal() {
 // ============== 장기 목표 모달 ==============
 function openGoalModal(editingId) {
   goalModalState.editingId = editingId;
-  // MCII 섹션은 항상 닫힌 채로 시작
-  document.getElementById('mciiSection').classList.remove('open');
   if (editingId) {
     const goal = findGoal(editingId);
     if (!goal) return;
@@ -4939,34 +5241,34 @@ function openGoalModal(editingId) {
       ? goal.deadlines.map(d => ({...d}))
       : (goal.deadline ? [{ id: makeDeadlineId(), label: '마감', date: goal.deadline }] : []);
     
-    goalModalState.tasks = (goal.tasks || []).map(t => ({...t}));
-    document.getElementById('gMciiPositive').value = goal.mciiPositive || '';
-    document.getElementById('gMciiObstacle').value = goal.mciiObstacle || '';
-    document.getElementById('gMciiPlan').value = goal.mciiPlan || '';
-    // 하나라도 채워져 있으면 펼쳐서 보여주기
-    if (goal.mciiPositive || goal.mciiObstacle || goal.mciiPlan) {
-      document.getElementById('mciiSection').classList.add('open');
-    }
+    // 세부 목표 트리 — 깊은 복사 (수정 후 취소 가능)
+    goalModalState.subgoals = (goal.subgoals || []).map(sg => deepCopySubgoal(sg));
+    
     document.getElementById('goalModalTitle').textContent = '장기 목표 수정';
     document.getElementById('goalDeleteBtn').style.display = 'block';
   } else {
     document.getElementById('gLabel').value = '';
-    // 기본 마감일: 1주일 뒤 23:59 (1개 미리 추가)
     const next = new Date();
     next.setDate(next.getDate() + 7);
     const defaultDate = `${next.getFullYear()}-${String(next.getMonth()+1).padStart(2,'0')}-${String(next.getDate()).padStart(2,'0')}T23:59`;
     goalModalState.deadlines = [{ id: makeDeadlineId(), label: '마감', date: defaultDate }];
-    goalModalState.tasks = [];
-    document.getElementById('gMciiPositive').value = '';
-    document.getElementById('gMciiObstacle').value = '';
-    document.getElementById('gMciiPlan').value = '';
+    goalModalState.subgoals = [];
     document.getElementById('goalModalTitle').textContent = '새 장기 목표';
     document.getElementById('goalDeleteBtn').style.display = 'none';
   }
   renderDeadlineList();
-  renderTaskList();
+  renderSubgoalTree();
   document.getElementById('goalModal').classList.add('open');
   setTimeout(() => document.getElementById('gLabel').focus(), 100);
+}
+
+function deepCopySubgoal(sg) {
+  return {
+    id: sg.id || makeSubgoalId(),
+    label: sg.label || '',
+    done: !!sg.done,
+    subgoals: (sg.subgoals || []).map(deepCopySubgoal),
+  };
 }
 
 function makeDeadlineId() {
@@ -4976,7 +5278,7 @@ function makeDeadlineId() {
 function closeGoalModal() {
   document.getElementById('goalModal').classList.remove('open');
   goalModalState.editingId = null;
-  goalModalState.tasks = [];
+  goalModalState.subgoals = [];
   goalModalState.deadlines = [];
 }
 
@@ -5081,80 +5383,143 @@ function renderDeadlineSuggestions() {
   }).join('');
 }
 
-function renderTaskList() {
-  const list = document.getElementById('taskList');
-  list.innerHTML = '';
-  if (goalModalState.tasks.length === 0) {
-    list.innerHTML = '<div class="empty-state compact">아직 일정이 없습니다. 아래 + 버튼으로 추가하세요</div>';
-    return;
-  }
-  const dayLabels = ['일','월','화','수','목','금','토'];
-  goalModalState.tasks.forEach((task, idx) => {
-    const row = document.createElement('div');
-    row.className = 'task-row';
-    const mode = task.mode || 'weekly';
-    
-    // 요일 칩: 다중 선택 가능
-    const selectedDays = (task.days || []).map(d => 
-      typeof d === 'string' && d !== 'all' ? parseInt(d, 10) : d
-    ).filter(d => typeof d === 'number');
-    
-    // 날짜 모드의 D-day 표시
-    let ddayHTML = '';
-    if (mode === 'date' && task.date) {
-      const dd = computeDDay(new Date(task.date + 'T23:59:59').toISOString());
-      ddayHTML = `<div class="task-date-dday ${dd.class}">${dd.text}</div>`;
-    }
-    
-    const dayChips = dayLabels.map((label, i) => {
-      const cls = (i === 0 ? 'sun' : i === 6 ? 'sat' : '') + (selectedDays.includes(i) ? ' on' : '');
-      return `<button type="button" class="task-day-pick ${cls}" data-task-day="${idx}:${i}">${label}</button>`;
-    }).join('');
-    
-    row.innerHTML = `
-      <div class="task-row-top">
-        <input type="text" class="task-label-input" placeholder="작업 내용 (예: 단어 외우기 / 모의고사 / 지원 마감)" 
-               value="${escapeHtml(task.label || '')}" data-idx="${idx}" maxlength="40">
-        <input type="number" class="task-time-input" placeholder="60" 
-               value="${task.minutes || 60}" min="10" max="600" step="10" data-idx="${idx}" title="목표 시간(분)">
-        <span class="task-time-suffix">분</span>
-        <button class="task-delete-btn" data-task-delete="${idx}" title="삭제">${icon('x', 14)}</button>
-      </div>
-      <div class="task-mode-tabs">
-        <button type="button" class="task-mode-tab ${mode === 'weekly' ? 'active' : ''}" data-task-mode="${idx}:weekly">${icon('refresh', 11)}매주 반복</button>
-        <button type="button" class="task-mode-tab ${mode === 'date' ? 'active' : ''}" data-task-mode="${idx}:date">${icon('target', 11)}특정 날짜</button>
-      </div>
-      ${mode === 'weekly' 
-        ? `<div class="task-day-grid">${dayChips}</div>`
-        : `<div class="task-date-row">
-             <input type="date" class="task-date-input" value="${task.date || ''}" data-task-date="${idx}">
-             ${ddayHTML}
-           </div>`}
-    `;
-    list.appendChild(row);
+// ===== 세부 목표 트리 렌더 (모달 편집기) =====
+function renderSubgoalTree() {
+  const tree = document.getElementById('subgoalTree');
+  if (!tree) return;
+  tree.innerHTML = '';
+  if (!goalModalState.subgoals || goalModalState.subgoals.length === 0) return;
+  goalModalState.subgoals.forEach(sg => {
+    tree.appendChild(renderSubgoalRow(sg));
   });
 }
 
-function addTask() {
-  goalModalState.tasks.push({
-    id: 't_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 4),
+function renderSubgoalRow(node) {
+  const wrap = document.createElement('div');
+  wrap.className = 'subgoal-row-wrap';
+  
+  const isLeaf = !Array.isArray(node.subgoals) || node.subgoals.length === 0;
+  const subTotal = countAllSubNodes(node);
+  const subDone = countDoneSubNodes(node);
+  const childProgress = subTotal > 0 ? subDone / subTotal : 0;
+  const isDone = !!node.done;  // 자기 done 직접
+  
+  const row = document.createElement('div');
+  row.className = 'subgoal-row' + (isDone ? ' is-done' : '');
+  row.dataset.sgId = node.id;
+  
+  // 체크박스: 자기 done이면 가득, 아니면 자식 진행률만큼 partial fill
+  const cb = document.createElement('button');
+  cb.type = 'button';
+  cb.className = 'subgoal-checkbox' + (isDone ? ' done' : (childProgress > 0 ? ' partial' : ''));
+  if (!isDone && childProgress > 0 && childProgress < 1) {
+    cb.style.setProperty('--fill', Math.round(childProgress * 100) + '%');
+  }
+  cb.dataset.sgToggle = node.id;
+  cb.innerHTML = isDone ? icon('check', 12) : '';
+  cb.title = '완료 표시';
+  row.appendChild(cb);
+  
+  // 라벨 입력
+  const labelInput = document.createElement('input');
+  labelInput.type = 'text';
+  labelInput.className = 'subgoal-label-input';
+  labelInput.value = node.label || '';
+  labelInput.placeholder = '세부 목표 (예: 단어 외우기, 모의고사 1회차)';
+  labelInput.dataset.sgLabel = node.id;
+  labelInput.maxLength = 60;
+  row.appendChild(labelInput);
+  
+  // 자식 진행률 미니 (자식 있을 때만)
+  if (!isLeaf) {
+    const prog = document.createElement('span');
+    prog.className = 'subgoal-progress-mini';
+    prog.textContent = `${subDone}/${subTotal}`;
+    row.appendChild(prog);
+  }
+  
+  // 액션 버튼들
+  const actions = document.createElement('div');
+  actions.className = 'subgoal-actions';
+  
+  const addChildBtn = document.createElement('button');
+  addChildBtn.type = 'button';
+  addChildBtn.className = 'subgoal-action-btn';
+  addChildBtn.dataset.sgAddChild = node.id;
+  addChildBtn.title = '하위 목표 추가';
+  addChildBtn.innerHTML = icon('plus', 13);
+  actions.appendChild(addChildBtn);
+  
+  const delBtn = document.createElement('button');
+  delBtn.type = 'button';
+  delBtn.className = 'subgoal-action-btn delete';
+  delBtn.dataset.sgDelete = node.id;
+  delBtn.title = '삭제';
+  delBtn.innerHTML = icon('trash', 13);
+  actions.appendChild(delBtn);
+  
+  row.appendChild(actions);
+  wrap.appendChild(row);
+  
+  // 재귀: 자식 렌더
+  if (!isLeaf) {
+    const children = document.createElement('div');
+    children.className = 'subgoal-children';
+    node.subgoals.forEach(child => {
+      children.appendChild(renderSubgoalRow(child));
+    });
+    wrap.appendChild(children);
+  }
+  
+  return wrap;
+}
+
+function addRootSubgoal() {
+  goalModalState.subgoals.push({
+    id: makeSubgoalId(),
     label: '',
-    minutes: 60,
-    mode: 'weekly',
-    days: [1], // 월요일 기본
-    date: '',  // 날짜 모드일 때만 사용
+    done: false,
+    subgoals: [],
   });
-  renderTaskList();
-  // 새로 추가된 행의 label에 포커스
+  renderSubgoalTree();
   setTimeout(() => {
-    const inputs = document.querySelectorAll('#taskList .task-label-input');
+    const inputs = document.querySelectorAll('#subgoalTree .subgoal-label-input');
     if (inputs.length) inputs[inputs.length - 1].focus();
   }, 50);
 }
 
-function deleteTask(idx) {
-  goalModalState.tasks.splice(idx, 1);
-  renderTaskList();
+function addChildSubgoalToId(parentId) {
+  // goalModalState.subgoals 트리 안에서 parentId 찾아서 자식 추가
+  const fakeRoot = { id: '__root__', subgoals: goalModalState.subgoals };
+  const parent = findSubgoalById(fakeRoot, parentId);
+  if (!parent) return;
+  if (!Array.isArray(parent.subgoals)) parent.subgoals = [];
+  parent.subgoals.push({
+    id: makeSubgoalId(),
+    label: '',
+    done: false,
+    subgoals: [],
+  });
+  // 부모가 leaf였다면 부모의 done 상태는 더 이상 의미 없음 (자식 진행률로 자동 계산)
+  parent.done = false;
+  renderSubgoalTree();
+  setTimeout(() => {
+    const allInputs = document.querySelectorAll('#subgoalTree .subgoal-label-input');
+    if (allInputs.length) allInputs[allInputs.length - 1].focus();
+  }, 50);
+}
+
+function deleteSubgoalFromModal(id) {
+  const fakeRoot = { id: '__root__', subgoals: goalModalState.subgoals };
+  deleteSubgoalById(fakeRoot, id);
+  goalModalState.subgoals = fakeRoot.subgoals;
+  renderSubgoalTree();
+}
+
+function toggleSubgoalInModal(id) {
+  const fakeRoot = { id: '__root__', subgoals: goalModalState.subgoals };
+  toggleSubgoalDone(fakeRoot, id);
+  renderSubgoalTree();
 }
 
 function saveGoal() {
@@ -5173,44 +5538,37 @@ function saveGoal() {
   });
   if (validDeadlines.length === 0) { showToast('주요 날짜를 1개 이상 추가해주세요'); return; }
   
-  const mciiPositive = document.getElementById('gMciiPositive').value.trim();
-  const mciiObstacle = document.getElementById('gMciiObstacle').value.trim();
-  const mciiPlan = document.getElementById('gMciiPlan').value.trim();
-  
-  // task 빈 값 정리 + 모드별 검증
-  const validTasks = [];
-  let invalidReason = '';
-  goalModalState.tasks.forEach(t => {
-    if (!t.label || !t.label.trim()) return; // 라벨 없으면 스킵
-    const mode = t.mode || 'weekly';
-    const base = {
-      id: t.id,
-      label: t.label.trim(),
-      minutes: Math.max(10, Math.round((t.minutes || 60) / 10) * 10),
-      mode,
-    };
-    if (mode === 'weekly') {
-      const days = (t.days || []).map(d => typeof d === 'string' ? parseInt(d,10) : d).filter(d => typeof d === 'number');
-      if (days.length === 0) { invalidReason = `'${t.label}': 요일을 1개 이상 선택해주세요`; return; }
-      validTasks.push({ ...base, days });
-    } else {
-      if (!t.date) { invalidReason = `'${t.label}': 날짜를 선택해주세요`; return; }
-      validTasks.push({ ...base, date: t.date });
-    }
-  });
-  if (invalidReason) { showToast(invalidReason); return; }
+  // 세부 목표 정리 — 라벨 비어있는 노드는 트리에서 제거 (자식이 있으면 자식만 부모로 끌어올림)
+  function cleanSubgoalTree(arr) {
+    if (!Array.isArray(arr)) return [];
+    const result = [];
+    arr.forEach(sg => {
+      const cleanedChildren = cleanSubgoalTree(sg.subgoals);
+      const labelTrim = (sg.label || '').trim();
+      if (!labelTrim && cleanedChildren.length === 0) return; // 빈 leaf 제거
+      // 라벨 비어있고 자식 있으면 → 자식들만 위로 (혹시 사용자가 빈 그룹 만든 경우)
+      if (!labelTrim && cleanedChildren.length > 0) {
+        cleanedChildren.forEach(c => result.push(c));
+        return;
+      }
+      result.push({
+        id: sg.id || makeSubgoalId(),
+        label: labelTrim,
+        done: !!sg.done,  // 자식 유무 무관, 모든 노드의 done 의미 있음
+        subgoals: cleanedChildren,
+      });
+    });
+    return result;
+  }
+  const cleanedSubgoals = cleanSubgoalTree(goalModalState.subgoals);
   
   if (goalModalState.editingId) {
     const goal = findGoal(goalModalState.editingId);
     if (goal) {
       goal.label = label;
       goal.deadlines = validDeadlines;
-      // 단일 deadline 필드는 backward compat용 (= 가장 마지막 날짜로)
       goal.deadline = validDeadlines[validDeadlines.length - 1].date;
-      goal.tasks = validTasks;
-      goal.mciiPositive = mciiPositive;
-      goal.mciiObstacle = mciiObstacle;
-      goal.mciiPlan = mciiPlan;
+      goal.subgoals = cleanedSubgoals;
     }
   } else {
     const lastIso = validDeadlines[validDeadlines.length - 1].date;
@@ -5218,16 +5576,16 @@ function saveGoal() {
       id: goalUid(),
       label,
       deadlines: validDeadlines,
-      deadline: lastIso, // backward compat
-      tasks: validTasks,
-      mciiPositive, mciiObstacle, mciiPlan,
+      deadline: lastIso,
+      subgoals: cleanedSubgoals,
+      tasks: [],
       createdAt: new Date().toISOString(),
     });
   }
   
   saveGoals();
   closeGoalModal();
-  syncGoalTasksToEntries();
+  syncGoalTasksToEntries(); // 잔여 fromGoalId 항목 청소
   persist();
   refreshAll();
   showToast('목표가 저장되었습니다');
@@ -5462,7 +5820,7 @@ function bindEvents() {
   document.getElementById('goalModal').addEventListener('click', e => {
     if (e.target.id === 'goalModal') closeGoalModal();
   });
-  document.getElementById('addTaskBtn').addEventListener('click', addTask);
+  document.getElementById('addRootSubgoalBtn').addEventListener('click', addRootSubgoal);
   document.getElementById('addDeadlineBtn').addEventListener('click', addDeadline);
   
   // 다중 마감일 — 리스트 내 변경/삭제 위임
@@ -5498,11 +5856,6 @@ function bindEvents() {
         }
       }
     }
-  });
-  
-  // MCII 섹션 펼치기/접기
-  document.getElementById('mciiSummary').addEventListener('click', () => {
-    document.getElementById('mciiSection').classList.toggle('open');
   });
   
   // 정체성 선언 입력
@@ -5662,90 +6015,64 @@ function bindEvents() {
   // ============== 14일 통계 PNG 익스포트 ==============
   document.getElementById('statsExportBtn').addEventListener('click', exportStatsPng);
 
-  document.getElementById('taskList').addEventListener('click', e => {
-    const del = e.target.closest('[data-task-delete]');
-    if (del) {
-      deleteTask(parseInt(del.dataset.taskDelete, 10));
+  // ===== 세부 목표 트리 이벤트 위임 =====
+  document.getElementById('subgoalTree').addEventListener('click', e => {
+    // 체크박스 토글
+    const toggleBtn = e.target.closest('[data-sg-toggle]');
+    if (toggleBtn) {
+      toggleSubgoalInModal(toggleBtn.dataset.sgToggle);
       return;
     }
-    // 모드 전환 (반복 / 날짜)
-    const modeBtn = e.target.closest('[data-task-mode]');
-    if (modeBtn) {
-      const [idxStr, mode] = modeBtn.dataset.taskMode.split(':');
-      const idx = parseInt(idxStr, 10);
-      if (goalModalState.tasks[idx]) {
-        goalModalState.tasks[idx].mode = mode;
-        // 모드 첫 전환 시 기본값 설정
-        if (mode === 'weekly' && (!goalModalState.tasks[idx].days || goalModalState.tasks[idx].days.length === 0)) {
-          goalModalState.tasks[idx].days = [1];
-        }
-        if (mode === 'date' && !goalModalState.tasks[idx].date) {
-          // 기본: 일주일 뒤
-          const d = new Date(); d.setDate(d.getDate() + 7);
-          goalModalState.tasks[idx].date = toLocalDateStr(d);
-        }
-        renderTaskList();
-      }
+    // 자식 추가
+    const addBtn = e.target.closest('[data-sg-add-child]');
+    if (addBtn) {
+      addChildSubgoalToId(addBtn.dataset.sgAddChild);
       return;
     }
-    // 요일 칩 토글 (다중 선택)
-    const dayBtn = e.target.closest('[data-task-day]');
-    if (dayBtn) {
-      const [idxStr, dayStr] = dayBtn.dataset.taskDay.split(':');
-      const idx = parseInt(idxStr, 10);
-      const day = parseInt(dayStr, 10);
-      const task = goalModalState.tasks[idx];
-      if (!task) return;
-      const days = (task.days || []).map(d => typeof d === 'string' ? parseInt(d,10) : d).filter(d => typeof d === 'number');
-      const pos = days.indexOf(day);
-      if (pos >= 0) days.splice(pos, 1);
-      else days.push(day);
-      days.sort((a,b) => a-b);
-      task.days = days;
-      // 요일 0개면 시각적 피드백을 위해 다시 그리기만, 저장 시 검증
-      renderTaskList();
+    // 삭제
+    const delBtn = e.target.closest('[data-sg-delete]');
+    if (delBtn) {
+      deleteSubgoalFromModal(delBtn.dataset.sgDelete);
       return;
     }
   });
-  
-  document.getElementById('taskList').addEventListener('input', e => {
+  document.getElementById('subgoalTree').addEventListener('input', e => {
     const t = e.target;
-    const idx = parseInt(t.dataset.idx, 10);
-    if (!isNaN(idx) && goalModalState.tasks[idx]) {
-      if (t.classList.contains('task-label-input')) {
-        goalModalState.tasks[idx].label = t.value;
-        return;
-      } else if (t.classList.contains('task-time-input')) {
-        goalModalState.tasks[idx].minutes = parseInt(t.value, 10) || 60;
-        return;
-      }
-    }
-    // 날짜 입력
-    const dateIdx = parseInt(t.dataset.taskDate, 10);
-    if (!isNaN(dateIdx) && goalModalState.tasks[dateIdx]) {
-      goalModalState.tasks[dateIdx].date = t.value;
-      // D-day 칩 업데이트 위해 다시 그리기
-      renderTaskList();
+    if (t.dataset.sgLabel) {
+      // 라벨 즉시 반영 (저장 시 cleanup)
+      const fakeRoot = { id: '__root__', subgoals: goalModalState.subgoals };
+      const node = findSubgoalById(fakeRoot, t.dataset.sgLabel);
+      if (node) node.label = t.value;
     }
   });
   
-  document.getElementById('taskList').addEventListener('change', e => {
-    const t = e.target;
-    const idx = parseInt(t.dataset.idx, 10);
-    if (!isNaN(idx) && goalModalState.tasks[idx]) {
-      if (t.classList.contains('task-time-input')) {
-        let v = parseInt(t.value, 10) || 60;
-        v = Math.max(10, Math.round(v / 10) * 10);
-        t.value = v;
-        goalModalState.tasks[idx].minutes = v;
-      }
-    }
-  });
-  
-  // 장기 목표 카드 클릭 → 수정
+  // 장기 목표 카드 클릭: 피라미드 leaf 클릭 = 토글, 카드 본체 = 수정 모달
   document.getElementById('goalsList').addEventListener('click', e => {
-    // details/summary/pre 클릭은 모달 안 열기
     if (e.target.closest('details')) return;
+    
+    // 피라미드 셀 클릭 처리 (모달 안 열고 직접 토글)
+    const cell = e.target.closest('[data-goal-pyramid-cell]');
+    if (cell) {
+      e.preventDefault();
+      e.stopPropagation();
+      const goalId = cell.dataset.goalId;
+      const sgId = cell.dataset.goalPyramidCell;
+      const isRoot = cell.dataset.isRoot === '1';
+      if (isRoot) {
+        // 루트(목표 자체) 클릭 = 모달 열기
+        openGoalModal(goalId);
+        return;
+      }
+      // 자식 토글 (leaf면 직접, 부모면 일괄)
+      const goal = findGoal(goalId);
+      if (!goal) return;
+      toggleSubgoalDone(goal, sgId);
+      saveGoals();
+      refreshAll();
+      return;
+    }
+    
+    // 카드 본체 클릭 = 수정 모달
     const card = e.target.closest('.goal-card');
     if (!card) return;
     openGoalModal(card.dataset.id);
