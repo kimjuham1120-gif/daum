@@ -2355,7 +2355,8 @@
         <span>다음할일</span>
       </div>
       <div class="header-actions">
-        <button class="icon-btn" id="syncBtn" title="동기화 / 로그인" data-icon="cloud">
+        <button class="icon-btn" id="reloadBtn" title="새로고침 (PWA 캐시 우회)" data-icon="refresh"></button>
+        <button class="icon-btn" id="syncBtn" title="동기화 / 로그인" data-icon="cloud">>
           <span class="sync-dot" id="syncDot"></span>
         </button>
         <button class="icon-btn" id="lettersBtn" title="미래의 나에게 편지" data-icon="mail"></button>
@@ -6516,6 +6517,13 @@ function bindEvents() {
   document.getElementById('todayBtn').addEventListener('click', () => {
     loadDate(toLocalDateStr(new Date()));
   });
+  // 새로고침 버튼 — PWA에서 캐시 우회 reload
+  document.getElementById('reloadBtn').addEventListener('click', () => {
+    // ?v=timestamp 붙여서 서버에서 새 버전 강제 fetch
+    const url = new URL(location.href);
+    url.searchParams.set('v', Date.now().toString());
+    location.replace(url.toString());
+  });
   document.getElementById('alarmBtn').addEventListener('click', async () => {
     const ok = await requestAlarmPermission();
     if (ok) showToast('알람이 활성화되었습니다');
@@ -7098,6 +7106,45 @@ function loadDate(date) {
         subs: e.subs ? e.subs.map(s => ({ label: s.label, value: '' })) : undefined,
       }));
     }
+    // === 시간 블록 강제 동기화 ===
+    // snapshot에 박힌 옛 시간표 정보를 template으로 덮어쓰기.
+    // 그날의 values(check, note)만 보존.
+    // 사유: 사용자가 다른 날 모달에서 days/label 등을 편집해도
+    // 다른 날 snapshot은 안 바뀌어서 옛 데이터가 살아남는 버그 방지.
+    const tmpl = loadTemplate() || [];
+    const tmplSched = tmpl.filter(t => t.id && t.id.startsWith('sched_'));
+    tmplSched.forEach(t => {
+      const existing = entries.find(e => e.id === t.id);
+      if (existing) {
+        // values만 보존, 나머지는 template으로 덮어쓰기
+        const preservedValues = existing.values || {};
+        existing.label = t.label;
+        existing.start = t.start || '';
+        existing.end = t.end || '';
+        existing.category = t.category || '';
+        existing.days = t.days || ['all'];
+        existing.alarm = t.alarm || '';
+        existing.goalMinutes = t.goalMinutes || 0;
+        existing.types = t.types || ['check'];
+        existing.pinned = true;
+        existing.values = preservedValues;
+      } else {
+        // snapshot에 없는 블록 추가
+        entries.push({
+          id: t.id,
+          label: t.label,
+          start: t.start || '',
+          end: t.end || '',
+          category: t.category || '',
+          days: t.days || ['all'],
+          alarm: t.alarm || '',
+          goalMinutes: t.goalMinutes || 0,
+          types: t.types || ['check'],
+          values: {},
+          pinned: true,
+        });
+      }
+    });
     // 장기 목표 task들 entries에 동기화
     syncGoalTasksToEntries();
     refreshAll();
