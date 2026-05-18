@@ -1677,6 +1677,364 @@
   .add-subchild-btn:hover { border-color: var(--accent); color: var(--accent); }
   .add-subchild-btn .ic { width: 10px; height: 10px; }
 
+  /* ============ 시간 블록 모달 (스케줄 편집) ============ */
+  .sb-cat-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+    margin-top: 4px;
+  }
+  .sb-cat-chip {
+    padding: 8px 4px;
+    border: 1.5px solid transparent;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    opacity: 0.6;
+  }
+  .sb-cat-chip:hover { opacity: 1; }
+  .sb-cat-chip.active {
+    opacity: 1;
+    border-color: var(--text-soft);
+    transform: scale(1.02);
+  }
+  .sb-cat-chip.c-meal     { background: #F1EFE8; color: #5F5E5A; }
+  .sb-cat-chip.c-read     { background: #E1F5EE; color: #085041; }
+  .sb-cat-chip.c-toeic    { background: #FBEAF0; color: #72243E; }
+  .sb-cat-chip.c-app      { background: #EEEDFE; color: #3C3489; }
+  .sb-cat-chip.c-alba     { background: #E6F1FB; color: #0C447C; }
+  .sb-cat-chip.c-exercise { background: #EAF3DE; color: #27500A; }
+  .sb-cat-chip.c-dopa     { background: #FAEEDA; color: #633806; }
+  .sb-cat-chip.c-prep     { background: #F1EFE8; color: #5F5E5A; }
+  .sb-cat-chip.c-journal  { background: #FAECE7; color: #712B13; }
+  html[data-theme="dark"] .sb-cat-chip.c-meal     { background: rgba(241,239,232,0.08); color: #c9c8c2; }
+  html[data-theme="dark"] .sb-cat-chip.c-read     { background: rgba(225,245,238,0.1); color: #7dc9b3; }
+  html[data-theme="dark"] .sb-cat-chip.c-toeic    { background: rgba(251,234,240,0.12); color: #e08eaa; }
+  html[data-theme="dark"] .sb-cat-chip.c-app      { background: rgba(238,237,254,0.12); color: #a8a3e5; }
+  html[data-theme="dark"] .sb-cat-chip.c-alba     { background: rgba(230,241,251,0.12); color: #7da9d4; }
+  html[data-theme="dark"] .sb-cat-chip.c-exercise { background: rgba(234,243,222,0.1); color: #98c46d; }
+  html[data-theme="dark"] .sb-cat-chip.c-dopa     { background: rgba(250,238,218,0.12); color: #d6a86a; }
+  html[data-theme="dark"] .sb-cat-chip.c-prep     { background: rgba(241,239,232,0.08); color: #c9c8c2; }
+  html[data-theme="dark"] .sb-cat-chip.c-journal  { background: rgba(250,236,231,0.12); color: #d18a6d; }
+  
+  .sb-day-chips {
+    display: flex; gap: 4px; margin-top: 4px;
+  }
+  .sb-day-chip {
+    flex: 1;
+    padding: 8px 4px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-soft);
+    cursor: pointer;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .sb-day-chip.sun { color: var(--warn); }
+  .sb-day-chip.sat { color: var(--indigo); }
+  .sb-day-chip.on {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+  .sb-day-chip.sun.on { background: var(--warn); border-color: var(--warn); }
+  .sb-day-chip.sat.on { background: var(--indigo); border-color: var(--indigo); }
+  
+  .alarm-toggle-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 12px;
+    background: var(--bg-soft);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px; font-weight: 600;
+    color: var(--text-soft);
+  }
+  .alarm-toggle-row input[type="checkbox"] {
+    width: 18px; height: 18px;
+    accent-color: var(--accent);
+  }
+  
+  .sb-note {
+    resize: vertical; min-height: 80px;
+    font-family: inherit; font-size: 13px;
+    padding: 10px 12px;
+    line-height: 1.55;
+  }
+  
+  /* 시간표 행에 메모 인디케이터 (작은 점) */
+  .sched-row .sched-pill.has-note {
+    position: relative;
+  }
+  .sched-row .sched-pill.has-note::after {
+    content: '';
+    position: absolute;
+    top: -2px; right: -2px;
+    width: 6px; height: 6px;
+    background: var(--indigo);
+    border-radius: 50%;
+    border: 1.5px solid var(--bg);
+  }
+
+  /* ============ 사용자 요청: 모든 배너/팝업 비활성화 ============ */
+  #freshBanner,
+  #restDayBanner,
+  #recoverBanner,
+  #insightsSection,
+  #reviewCardContainer,
+  #firstProgressContainer,
+  #lettersDueSection,
+  .fresh-banner,
+  .rest-day-banner,
+  .recover-banner,
+  .insights-section,
+  .review-card,
+  .insight-card,
+  .letters-due-section,
+  .rest-controls {
+    display: none !important;
+  }
+
+  /* ============ 시간표 (Schedule Block-Style) ============ */
+  .schedule-header {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding: 8px 2px 12px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+  .schedule-header-title {
+    font-size: 14px; font-weight: 800; color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .schedule-header-meta {
+    font-size: 11px; color: var(--text-muted); font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  
+  /* 시간 블록 행 */
+  .sched-row {
+    display: grid;
+    grid-template-columns: 84px 1fr 32px;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .sched-time {
+    font-size: 12px;
+    color: var(--text-soft);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    text-align: right;
+    padding-right: 4px;
+  }
+  
+  /* 메인 블록 박스 — 카테고리 색 (기본 상태) */
+  .sched-block {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1.5px solid transparent;
+    background: var(--block-bg, var(--bg-soft));
+    color: var(--block-fg, var(--text));
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    min-width: 0;
+  }
+  .sched-block:active { transform: scale(0.985); }
+  .sched-block-label {
+    flex: 1; min-width: 0;
+    font-size: 13.5px; font-weight: 600;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    letter-spacing: -0.01em;
+  }
+  .sched-block-dur {
+    flex-shrink: 0;
+    font-size: 11.5px; font-weight: 600;
+    opacity: 0.75;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  
+  /* 카테고리 색 (기본 미정 상태) */
+  .sched-block.c-meal     { background: #F1EFE8; color: #5F5E5A; }
+  .sched-block.c-read     { background: #E1F5EE; color: #085041; }
+  .sched-block.c-toeic    { background: #FBEAF0; color: #72243E; }
+  .sched-block.c-app      { background: #EEEDFE; color: #3C3489; }
+  .sched-block.c-alba     { background: #E6F1FB; color: #0C447C; }
+  .sched-block.c-exercise { background: #EAF3DE; color: #27500A; }
+  .sched-block.c-dopa     { background: #FAEEDA; color: #633806; }
+  .sched-block.c-prep     { background: #F1EFE8; color: #5F5E5A; }
+  .sched-block.c-journal  { background: #FAECE7; color: #712B13; }
+  html[data-theme="dark"] .sched-block.c-meal     { background: rgba(241,239,232,0.08); color: #c9c8c2; }
+  html[data-theme="dark"] .sched-block.c-read     { background: rgba(225,245,238,0.1); color: #7dc9b3; }
+  html[data-theme="dark"] .sched-block.c-toeic    { background: rgba(251,234,240,0.12); color: #e08eaa; }
+  html[data-theme="dark"] .sched-block.c-app      { background: rgba(238,237,254,0.12); color: #a8a3e5; }
+  html[data-theme="dark"] .sched-block.c-alba     { background: rgba(230,241,251,0.12); color: #7da9d4; }
+  html[data-theme="dark"] .sched-block.c-exercise { background: rgba(234,243,222,0.1); color: #98c46d; }
+  html[data-theme="dark"] .sched-block.c-dopa     { background: rgba(250,238,218,0.12); color: #d6a86a; }
+  html[data-theme="dark"] .sched-block.c-prep     { background: rgba(241,239,232,0.08); color: #c9c8c2; }
+  html[data-theme="dark"] .sched-block.c-journal  { background: rgba(250,236,231,0.12); color: #d18a6d; }
+  
+  /* 완료 — 초록 (페퍼민트) — 카테고리 색 덮어쓰기 */
+  .sched-block.done {
+    background: var(--accent) !important;
+    color: white !important;
+  }
+  .sched-block.done .sched-block-dur { opacity: 0.85; }
+  
+  /* 의도적 미완료 — 빨강 — 카테고리 색 덮어쓰기 */
+  .sched-block.undone {
+    background: var(--warn) !important;
+    color: white !important;
+  }
+  .sched-block.undone .sched-block-dur { opacity: 0.85; }
+  
+  /* 현재 시간 블록 — 살짝 강조 (테두리) */
+  .sched-row.now .sched-block {
+    border-color: var(--accent-strong);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  
+  /* 메모/편집 버튼 (블록 오른쪽 작은 버튼) */
+  .sched-edit-btn {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    flex-shrink: 0;
+  }
+  .sched-edit-btn:hover { border-color: var(--text-soft); color: var(--text); }
+  .sched-edit-btn.has-note {
+    color: var(--indigo);
+    border-color: var(--indigo);
+    background: var(--indigo-soft, rgba(74,91,158,0.08));
+  }
+  .sched-edit-btn .ic { width: 14px; height: 14px; }
+  
+  /* NOW 마커 */
+  .sched-now-marker {
+    margin: 16px 0 8px;
+    padding: 4px 8px;
+    font-size: 10px; font-weight: 800;
+    color: var(--accent-strong);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .sched-now-marker.next {
+    color: var(--text-muted);
+  }
+  .sched-now-marker::before {
+    content: ''; width: 6px; height: 6px;
+    background: currentColor; border-radius: 50%;
+    animation: schedNowPulse 2s ease-in-out infinite;
+  }
+  .sched-now-marker.next::before { animation: none; opacity: 0.5; }
+  @keyframes schedNowPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  
+  /* 과거 블록 접기 */
+  .sched-past-toggle {
+    margin: 8px 0;
+    padding: 8px 12px;
+    background: var(--bg-soft);
+    border: 1px dashed var(--border-strong);
+    border-radius: 8px;
+    color: var(--text-soft);
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .sched-past-toggle:hover { border-color: var(--accent); color: var(--accent); }
+  
+  /* 빈 화면 fallback */
+  .sched-empty-action {
+    margin-top: 16px;
+    padding: 12px 20px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit; font-weight: 700; font-size: 13px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  @media (max-width: 380px) {
+    .sched-row { grid-template-columns: 68px 1fr 28px; gap: 6px; }
+    .sched-time { font-size: 11px; }
+    .sched-block { padding: 10px 12px; }
+    .sched-block-label { font-size: 12.5px; }
+    .sched-block-dur { font-size: 10.5px; }
+  }
+
+  /* ============ 인지 부하 관리: 5개씩 표시 ============ */
+  .queue-indicator {
+    margin: 12px 0 14px;
+    padding: 12px 14px;
+    background: var(--bg-soft);
+    border: 1px dashed var(--border-strong);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--text-soft);
+    font-weight: 600;
+    line-height: 1.45;
+  }
+  .queue-text { flex: 1; min-width: 0; }
+  .queue-text b { color: var(--text); font-weight: 800; }
+  .queue-research { color: var(--text-muted); font-size: 10.5px; font-weight: 500; }
+  .queue-expand {
+    background: var(--bg); border: 1px solid var(--border-strong);
+    color: var(--text-soft);
+    padding: 5px 10px; border-radius: 6px;
+    font-family: inherit; font-size: 11.5px; font-weight: 700;
+    cursor: pointer; flex-shrink: 0;
+    transition: border-color 0.15s, color 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .queue-expand:hover { border-color: var(--accent); color: var(--accent); }
+  .done-section-header {
+    margin: 18px 0 8px;
+    padding: 4px 2px;
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    display: flex; align-items: center; gap: 6px;
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+  }
+  .done-section-header .check-mark {
+    color: var(--accent);
+    font-weight: 800;
+  }
+
   /* ============ 피라미드 시각화 (카드 안) ============ */
   .goal-pyramid {
     margin-top: 10px;
@@ -2076,14 +2434,12 @@
 
     <div class="summary-grid" id="summaryGrid"></div>
     <div class="section-header">
-      <div class="section-title">오늘의 항목</div>
-      <div class="rest-controls">
-        <div class="section-count" id="itemCount">—</div>
-        <button class="rest-day-btn" id="restDayBtn" title="오늘은 쉬기 — 월 2회 사용 가능">🌿 오늘은 쉬기</button>
-      </div>
+      <div class="section-title" data-icon-before="clock">시간표</div>
+      <button class="section-action-btn" id="addBtn" data-icon-before="plus">시간 블록 추가</button>
     </div>
     <div class="items" id="items"></div>
-    <button class="add-btn" id="addBtn">+ 새 항목 추가</button>
+    <!-- 숨겨진 호환용 (코드에서 참조됨) -->
+    <span id="itemCount" style="display:none;">—</span>
     <div class="cumulative-text" id="cumulativeText"></div>
     <div id="statsSection" style="margin-top:28px;display:none;">
       <div class="section-header">
@@ -2228,6 +2584,78 @@
     <div class="modal-actions">
       <button class="btn" id="modalCancel">취소</button>
       <button class="btn btn-primary" id="modalSave" data-icon-before="check">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- 시간 블록 편집 모달 -->
+<div class="modal-overlay" id="sbModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="sbModalTitle">시간 블록 편집</div>
+      <button class="modal-close" id="sbModalClose">×</button>
+    </div>
+    
+    <div class="field-group">
+      <label class="field-label">활동</label>
+      <input type="text" class="field-input" id="sbLabel" placeholder="예: 아침, TOEIC, 운동" maxlength="40">
+    </div>
+    
+    <div class="field-row" style="display:flex;gap:10px;">
+      <div class="field-group" style="flex:1;">
+        <label class="field-label">시작</label>
+        <input type="time" class="field-input" id="sbStart">
+      </div>
+      <div class="field-group" style="flex:1;">
+        <label class="field-label">끝</label>
+        <input type="time" class="field-input" id="sbEnd">
+      </div>
+    </div>
+    
+    <div class="field-group">
+      <label class="field-label">카테고리</label>
+      <div class="sb-cat-grid" id="sbCatGrid">
+        <button type="button" class="sb-cat-chip c-meal"     data-cat="meal">식사</button>
+        <button type="button" class="sb-cat-chip c-read"     data-cat="read">독서</button>
+        <button type="button" class="sb-cat-chip c-toeic"    data-cat="toeic">학습</button>
+        <button type="button" class="sb-cat-chip c-app"      data-cat="app">개발</button>
+        <button type="button" class="sb-cat-chip c-alba"     data-cat="alba">알바·외부</button>
+        <button type="button" class="sb-cat-chip c-exercise" data-cat="exercise">운동</button>
+        <button type="button" class="sb-cat-chip c-dopa"     data-cat="dopa">휴식·도파민</button>
+        <button type="button" class="sb-cat-chip c-prep"     data-cat="prep">이동·준비</button>
+        <button type="button" class="sb-cat-chip c-journal"  data-cat="journal">일기</button>
+      </div>
+    </div>
+    
+    <div class="field-group">
+      <label class="field-label">요일</label>
+      <div class="sb-day-chips" id="sbDayChips">
+        <button type="button" class="sb-day-chip sun" data-day="0">일</button>
+        <button type="button" class="sb-day-chip"     data-day="1">월</button>
+        <button type="button" class="sb-day-chip"     data-day="2">화</button>
+        <button type="button" class="sb-day-chip"     data-day="3">수</button>
+        <button type="button" class="sb-day-chip"     data-day="4">목</button>
+        <button type="button" class="sb-day-chip"     data-day="5">금</button>
+        <button type="button" class="sb-day-chip sat" data-day="6">토</button>
+      </div>
+    </div>
+    
+    <div class="field-group">
+      <label class="alarm-toggle-row">
+        <input type="checkbox" id="sbAlarm">
+        <span>시작 시간에 알람</span>
+      </label>
+    </div>
+    
+    <div class="field-group">
+      <label class="field-label">오늘의 메모 · 느낀점 <span style="color:var(--text-muted);font-weight:400;">(이 날짜에만 저장)</span></label>
+      <textarea class="field-input sb-note" id="sbNote" rows="4" placeholder="이 시간에 대한 느낀점이나 기록..."></textarea>
+    </div>
+    
+    <div class="modal-actions">
+      <button class="btn btn-danger" id="sbDelete" style="display:none;">삭제</button>
+      <button class="btn" id="sbCancel">취소</button>
+      <button class="btn btn-primary" id="sbSave" data-icon-before="check">저장</button>
     </div>
   </div>
 </div>
@@ -2509,6 +2937,184 @@ let entries = [];
 let goals = []; // 장기 목표
 let freeText = '';
 let autoSaveTimer = null;
+
+// 인지 부하 관리: 한 번에 5개씩만 표시 (Miller 1956, Iyengar & Lepper 2000)
+const VISIBLE_LIMIT = 5;
+let showAllItems = false;  // 트래커 항목 "전체 보기" 토글 (세션 한정)
+let showAllGoals = false;  // 장기 목표 "전체 보기" 토글 (세션 한정)
+let showSchedulePast = false;  // 시간표 과거 블록 펼치기 (세션 한정)
+
+// ============== 시간표 (Schedule) 템플릿 ==============
+// 평일/토요일/일요일 시간 블록. 카테고리: meal·read·toeic·app·alba·exercise·dopa·prep·journal
+const SCHEDULE_TEMPLATE = {
+  weekday: [  // 월~금 (1~5)
+    { start: '05:30', end: '06:00', label: '아침',                  category: 'meal' },
+    { start: '06:00', end: '07:40', label: '인문 독서 (1차 정점)',   category: 'read' },
+    { start: '07:40', end: '08:00', label: '외출 준비',              category: 'prep' },
+    { start: '08:00', end: '08:50', label: '출근 (차 수면)',         category: 'prep' },
+    { start: '08:50', end: '09:00', label: '도착 정리 / 휴식',       category: 'dopa' },
+    { start: '09:00', end: '11:00', label: 'TOEIC (월·수·금 실모)',  category: 'toeic' },
+    { start: '11:00', end: '11:30', label: '점심',                  category: 'meal' },
+    { start: '11:30', end: '11:45', label: '산책 (식곤증 방지)',     category: 'exercise' },
+    { start: '11:45', end: '13:00', label: '앱 개발',                category: 'app' },
+    { start: '13:00', end: '16:00', label: '알바 (14:30 쉐이크)',    category: 'alba' },
+    { start: '16:00', end: '16:40', label: '휴식 + 간식 + 단어',     category: 'meal' },
+    { start: '16:40', end: '17:30', label: '퇴근 (차 수면)',         category: 'prep' },
+    { start: '17:30', end: '18:00', label: '깨우기 + 가벼운 활동',   category: 'dopa' },
+    { start: '18:00', end: '19:10', label: '운동',                  category: 'exercise' },
+    { start: '19:10', end: '19:40', label: '저녁',                  category: 'meal' },
+    { start: '19:40', end: '20:40', label: '도파민 (롱폼)',          category: 'dopa' },
+    { start: '20:40', end: '20:50', label: '휴식 (인지 전환)',       category: 'dopa' },
+    { start: '20:50', end: '21:05', label: '일기',                  category: 'journal' },
+    { start: '21:05', end: '21:45', label: '문학 독서 (와인다운)',   category: 'read' },
+    { start: '21:45', end: '22:00', label: '취침 준비',              category: 'prep' },
+  ],
+  saturday: [  // 토 (6)
+    { start: '06:30', end: '07:00', label: '아침',                  category: 'meal' },
+    { start: '07:00', end: '08:40', label: '인문 독서 (분할)',       category: 'read' },
+    { start: '08:40', end: '09:00', label: '휴식',                  category: 'dopa' },
+    { start: '09:00', end: '10:00', label: 'TOEIC 또는 앱 개발',     category: 'toeic' },
+    { start: '10:00', end: '10:10', label: '점심 준비 + 단어',       category: 'toeic' },
+    { start: '10:10', end: '10:40', label: '점심',                  category: 'meal' },
+    { start: '10:40', end: '11:00', label: '외출 준비',              category: 'prep' },
+    { start: '11:00', end: '12:15', label: '출근 이동 (대중교통)',   category: 'prep' },
+    { start: '12:15', end: '12:30', label: '대기',                  category: 'prep' },
+    { start: '12:30', end: '15:00', label: '알바 (13:30 쉐이크)',    category: 'alba' },
+    { start: '15:00', end: '15:15', label: '간식',                  category: 'meal' },
+    { start: '15:15', end: '16:05', label: '학습 (한 블록)',         category: 'toeic' },
+    { start: '16:05', end: '17:30', label: '도파민 + 자유',          category: 'dopa' },
+    { start: '17:30', end: '18:10', label: '저녁',                  category: 'meal' },
+    { start: '18:10', end: '19:25', label: '귀가 이동 (도파민 X)',   category: 'prep' },
+    { start: '19:25', end: '20:35', label: '러닝 + 씻기',            category: 'exercise' },
+    { start: '20:35', end: '21:20', label: '도파민 (마무리)',        category: 'dopa' },
+    { start: '21:20', end: '21:30', label: '휴식',                  category: 'dopa' },
+    { start: '21:30', end: '21:45', label: '일기',                  category: 'journal' },
+    { start: '21:45', end: '22:00', label: '취침 준비',              category: 'prep' },
+  ],
+  sunday: [  // 일 (0)
+    { start: '06:30', end: '07:00', label: '아침',                  category: 'meal' },
+    { start: '07:00', end: '08:40', label: '인문 독서 (분할)',       category: 'read' },
+    { start: '08:40', end: '09:00', label: '외출 준비',              category: 'prep' },
+    { start: '09:00', end: '10:00', label: '이동',                  category: 'prep' },
+    { start: '10:00', end: '10:30', label: '도착 정리 + 간식',       category: 'meal' },
+    { start: '10:30', end: '12:30', label: 'TOEIC 실모',             category: 'toeic' },
+    { start: '12:30', end: '13:10', label: '점심',                  category: 'meal' },
+    { start: '13:10', end: '13:30', label: '단어 가볍게',            category: 'toeic' },
+    { start: '13:30', end: '13:50', label: '산책',                  category: 'exercise' },
+    { start: '13:50', end: '14:00', label: '교회 이동',              category: 'prep' },
+    { start: '14:00', end: '15:30', label: '예배',                  category: 'alba' },
+    { start: '15:30', end: '17:00', label: '순모임 (간식)',          category: 'alba' },
+    { start: '17:00', end: '18:30', label: '귀가 이동',              category: 'prep' },
+    { start: '18:30', end: '19:00', label: '저녁',                  category: 'meal' },
+    { start: '19:00', end: '20:50', label: '도파민 + 가족 시간',     category: 'dopa' },
+    { start: '20:50', end: '21:00', label: '휴식',                  category: 'dopa' },
+    { start: '21:00', end: '21:30', label: '일기 + 주간 회고',       category: 'journal' },
+    { start: '21:30', end: '21:45', label: '문학 독서',              category: 'read' },
+    { start: '21:45', end: '22:00', label: '취침 준비',              category: 'prep' },
+  ],
+};
+
+// 시간표 강제 동기화: SCHEDULE_TEMPLATE = 단일 진실원천
+// 누락된 블록은 추가, 기존 블록의 누락된 필드는 채워넣음 (사용자 편집은 보존)
+function syncScheduleEntries() {
+  const dayMap = {
+    weekday: [1, 2, 3, 4, 5],
+    saturday: [6],
+    sunday: [0],
+  };
+  let changed = false;
+  Object.entries(SCHEDULE_TEMPLATE).forEach(([dayKey, blocks]) => {
+    blocks.forEach((block, idx) => {
+      const id = 'sched_' + dayKey + '_' + String(idx).padStart(2,'0');
+      const mins = scheduleMinutesBetween(block.start, block.end);
+      const existing = entries.find(e => e.id === id);
+      if (existing) {
+        // 필수 필드 누락 시 채워넣기 (사용자 편집은 보존)
+        if (!existing.start) { existing.start = block.start; changed = true; }
+        if (!existing.end) { existing.end = block.end; changed = true; }
+        if (!existing.category) { existing.category = block.category; changed = true; }
+        if (!existing.label) { existing.label = block.label; changed = true; }
+        if (!existing.pinned) { existing.pinned = true; changed = true; }
+        if (!Array.isArray(existing.days) || existing.days.length === 0) { existing.days = dayMap[dayKey]; changed = true; }
+        if (!Array.isArray(existing.types) || existing.types.length === 0) { existing.types = ['check']; changed = true; }
+        if (!existing.goalMinutes) { existing.goalMinutes = mins; changed = true; }
+        if (!existing.values) { existing.values = {}; changed = true; }
+      } else {
+        entries.push({
+          id,
+          label: block.label,
+          start: block.start,
+          end: block.end,
+          category: block.category,
+          types: ['check'],
+          values: {},
+          pinned: true,
+          days: dayMap[dayKey],
+          alarm: '',
+          alarmMessage: '',
+          goalMinutes: mins,
+        });
+        changed = true;
+      }
+    });
+  });
+  if (changed) {
+    saveTemplate();
+    persist();
+  }
+  return changed;
+}
+
+// 별칭 (resetSchedule용)
+function importScheduleToEntries() {
+  return syncScheduleEntries() ? 1 : 0;
+}
+
+function scheduleMinutesBetween(start, end) {
+  if (!start || !end) return 0;
+  const [sh, sm] = start.split(':').map(Number);
+  const [eh, em] = end.split(':').map(Number);
+  return Math.max(0, (eh * 60 + em) - (sh * 60 + sm));
+}
+
+// 시간표 강제 reset — 모든 sched_* entries 제거 후 SCHEDULE_TEMPLATE에서 새로
+// 콘솔에서 resetSchedule() 호출 가능 (사용자가 시간표를 망친 경우 복구용)
+window.resetSchedule = function() {
+  if (!confirm('시간표를 기본값으로 복원할까요? 편집한 블록과 추가한 블록이 모두 사라집니다. (날짜별 메모는 보존됩니다)')) return;
+  entries = entries.filter(e => !(e.id && e.id.startsWith('sched_')));
+  importScheduleToEntries();
+  saveTemplate();
+  persist();
+  refreshAll();
+  console.log('✓ 시간표가 기본값으로 복원되었습니다');
+  if (typeof showToast === 'function') showToast('시간표 기본값으로 복원됨');
+};
+
+function scheduleTimeToMinutes(t) {
+  if (!t) return 0;
+  const [h, m] = t.split(':').map(Number);
+  return h * 60 + m;
+}
+
+function getScheduleDayType(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  const dow = d.getDay();
+  if (dow === 0) return 'sunday';
+  if (dow === 6) return 'saturday';
+  return 'weekday';
+}
+
+function isScheduleBlock(entry) {
+  return !!(entry && entry.start && entry.end);
+}
+
+function formatScheduleDuration(mins) {
+  if (mins <= 0) return '';
+  if (mins < 60) return mins + '분';
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  return m === 0 ? h + 'h' : h + 'h ' + m + 'm';
+}
 let modalState = { editingId: null, types: ['text'], pinned: true, days: ['all'], goalMinutes: 0, cue: '', place: '', bundle: '', difficulty: 3 };
 let goalModalState = { editingId: null, tasks: [], deadlines: [] };
 let confirmCallback = null;
@@ -2629,11 +3235,14 @@ function saveTemplate() {
   const pinned = entries
     .filter(e => e.pinned && !e.fromGoalId) // 장기목표에서 생긴 항목은 템플릿에 안 넣음
     .map(e => ({
+      id: e.id,  // ← 시간 블록 id 보존 (sched_weekday_00 등) — 재로드 시 동일성 유지
       label: e.label, types: e.types || ['text'], pinned: true,
       days: e.days || ['all'], alarm: e.alarm || '', alarmMessage: e.alarmMessage || '',
       goalMinutes: e.goalMinutes || 0,
       cue: e.cue || '', place: e.place || '', bundle: e.bundle || '',
       difficulty: e.difficulty || 3,
+      // 시간표 필드 (시간 블록인 경우)
+      start: e.start || '', end: e.end || '', category: e.category || '',
       subs: e.subs ? e.subs.map(s => ({ label: s.label, value: '' })) : undefined
     }));
   return lsSet(lsKey('template'), pinned);
@@ -3922,8 +4531,46 @@ function renderGoals() {
     return new Date(aIso) - new Date(bIso);
   });
   
+  // 인지 부하 관리: 진행률 100% 미만(active) vs 100%(완료) 분리
+  const activeGoals = [];
+  const doneGoals = [];
+  sorted.forEach(g => {
+    const prog = computeGoalProgress(g);
+    if (prog.total > 0 && prog.percent >= 100) doneGoals.push(g);
+    else activeGoals.push(g);
+  });
+  const shownGoals = showAllGoals ? activeGoals : activeGoals.slice(0, VISIBLE_LIMIT);
+  const queuedGoalsCount = showAllGoals ? 0 : Math.max(0, activeGoals.length - VISIBLE_LIMIT);
+  
+  // 렌더 순서: shownGoals → (queue indicator) → (done header) → doneGoals
+  const goalRenderList = [];
+  shownGoals.forEach(g => goalRenderList.push({ kind: 'goal', goal: g }));
+  if (queuedGoalsCount > 0) goalRenderList.push({ kind: 'queue', count: queuedGoalsCount });
+  if (doneGoals.length > 0) {
+    goalRenderList.push({ kind: 'doneHeader', count: doneGoals.length });
+    doneGoals.forEach(g => goalRenderList.push({ kind: 'goal', goal: g }));
+  }
+  
   list.innerHTML = '';
-  sorted.forEach(goal => {
+  goalRenderList.forEach(item => {
+    if (item.kind === 'queue') {
+      const ind = document.createElement('div');
+      ind.className = 'queue-indicator';
+      ind.innerHTML = `
+        <div class="queue-text"><b>+${item.count}개 목표 대기 중</b> · 위 ${VISIBLE_LIMIT}개부터 진행 <span class="queue-research">(Iyengar 2000)</span></div>
+        <button type="button" class="queue-expand" data-action="show-all-goals">전체 보기</button>
+      `;
+      list.appendChild(ind);
+      return;
+    }
+    if (item.kind === 'doneHeader') {
+      const hdr = document.createElement('div');
+      hdr.className = 'done-section-header';
+      hdr.innerHTML = `<span class="check-mark">✓</span> 완료한 목표 ${item.count}개`;
+      list.appendChild(hdr);
+      return;
+    }
+    const goal = item.goal;
     try {
       const primary = getPrimaryDeadline(goal);
       const dday = primary ? computeDDay(primary.date) : { text: '날짜 미정', class: 'past' };
@@ -4186,153 +4833,342 @@ function renderDetailedStats() {
   });
 }
 
+// ============== 시간표 렌더링 ==============
+function renderScheduleTable(blocks, container) {
+  // 시작 시간 순 정렬
+  const sorted = [...blocks].sort((a, b) => scheduleTimeToMinutes(a.start) - scheduleTimeToMinutes(b.start));
+  
+  // 오늘인지, 그리고 현재 시간 (오늘이 아니면 NOW 강조 X)
+  const todayStr = toLocalDateStr(new Date());
+  const isToday = currentDate === todayStr;
+  const now = new Date();
+  const nowMin = isToday ? now.getHours() * 60 + now.getMinutes() : -1;
+  
+  // 헤더 (요일 / 카테고리 컬러 키)
+  const dayType = getScheduleDayType(currentDate);
+  const dayTypeLabel = { weekday: '평일', saturday: '토요일', sunday: '일요일' }[dayType];
+  const header = document.createElement('div');
+  header.className = 'schedule-header';
+  header.innerHTML = `
+    <span class="schedule-header-title">${dayTypeLabel} 시간표</span>
+    <span class="schedule-header-meta">${blocks.length}블록 · ⏰ 알람 켜기</span>
+  `;
+  container.appendChild(header);
+  
+  // 과거/현재/미래 분류
+  const pastBlocks = [];
+  const currentBlock = [];  // 0 or 1
+  const futureBlocks = [];
+  sorted.forEach(b => {
+    const sMin = scheduleTimeToMinutes(b.start);
+    const eMin = scheduleTimeToMinutes(b.end);
+    if (nowMin < 0) {
+      // 오늘이 아니면 전부 future 취급 (NOW 강조 없이)
+      futureBlocks.push(b);
+    } else if (eMin <= nowMin) {
+      pastBlocks.push(b);
+    } else if (sMin <= nowMin && nowMin < eMin) {
+      currentBlock.push(b);
+    } else {
+      futureBlocks.push(b);
+    }
+  });
+  
+  // 과거: 모두 완료한 개수 표시
+  if (pastBlocks.length > 0 && isToday) {
+    const pastDone = pastBlocks.filter(b => (b.values || {}).check === true).length;
+    if (!showSchedulePast) {
+      const toggle = document.createElement('button');
+      toggle.type = 'button';
+      toggle.className = 'sched-past-toggle';
+      toggle.dataset.action = 'show-schedule-past';
+      toggle.textContent = `▾ 지난 ${pastBlocks.length}블록 (완료 ${pastDone}/${pastBlocks.length}) — 펼치기`;
+      container.appendChild(toggle);
+    } else {
+      const toggle = document.createElement('button');
+      toggle.type = 'button';
+      toggle.className = 'sched-past-toggle';
+      toggle.dataset.action = 'show-schedule-past';
+      toggle.textContent = `▴ 지난 블록 접기`;
+      container.appendChild(toggle);
+      pastBlocks.forEach(b => container.appendChild(renderScheduleRow(b, 'past')));
+    }
+  } else if (!isToday) {
+    // 오늘이 아니면 전체 다 future 형태로 — 그냥 그대로 렌더 (NOW 표시 없이)
+  }
+  
+  // NOW 표시 + 현재 블록
+  if (currentBlock.length > 0 && isToday) {
+    const marker = document.createElement('div');
+    marker.className = 'sched-now-marker';
+    const hh = String(now.getHours()).padStart(2,'0');
+    const mm = String(now.getMinutes()).padStart(2,'0');
+    marker.textContent = `지금 · ${hh}:${mm}`;
+    container.appendChild(marker);
+    currentBlock.forEach(b => container.appendChild(renderScheduleRow(b, 'now')));
+  }
+  
+  // 다음 (5개 + queue)
+  const upcoming = futureBlocks;
+  const upcomingShown = showAllItems ? upcoming : upcoming.slice(0, VISIBLE_LIMIT);
+  const upcomingQueued = showAllItems ? 0 : Math.max(0, upcoming.length - VISIBLE_LIMIT);
+  
+  if (currentBlock.length > 0 && upcomingShown.length > 0 && isToday) {
+    const nextMarker = document.createElement('div');
+    nextMarker.className = 'sched-now-marker';
+    nextMarker.style.color = 'var(--text-muted)';
+    nextMarker.textContent = `다음 (${upcoming.length}블록)`;
+    container.appendChild(nextMarker);
+  }
+  
+  upcomingShown.forEach(b => container.appendChild(renderScheduleRow(b, 'future')));
+  
+  if (upcomingQueued > 0) {
+    const ind = document.createElement('div');
+    ind.className = 'queue-indicator';
+    ind.innerHTML = `
+      <div class="queue-text"><b>+${upcomingQueued}블록</b> · 위 ${VISIBLE_LIMIT}개를 마치면 다음 시간대 등장</div>
+      <button type="button" class="queue-expand" data-action="show-all-items">전체 보기</button>
+    `;
+    container.appendChild(ind);
+  }
+}
+
+function renderScheduleRow(entry, mode) {
+  const row = document.createElement('div');
+  const v = entry.values || {};
+  const checkState = v.check;  // undefined | true (완료) | false (의도적 미완료)
+  const hasNote = !!(v.note || '').trim();
+  const classes = ['sched-row'];
+  if (mode === 'now') classes.push('now');
+  row.className = classes.join(' ');
+  row.dataset.id = entry.id;
+  
+  const dur = scheduleMinutesBetween(entry.start, entry.end);
+  const durStr = formatScheduleDuration(dur);
+  const cat = entry.category || 'prep';
+  
+  // 시간 컬럼 (왼쪽)
+  const timeEl = document.createElement('div');
+  timeEl.className = 'sched-time';
+  timeEl.textContent = `${entry.start}~${entry.end}`;
+  row.appendChild(timeEl);
+  
+  // 메인 블록 박스 (가운데, 클릭 시 토글)
+  const blockClasses = ['sched-block', 'c-' + cat];
+  if (checkState === true) blockClasses.push('done');
+  else if (checkState === false) blockClasses.push('undone');
+  
+  const block = document.createElement('button');
+  block.type = 'button';
+  block.className = blockClasses.join(' ');
+  block.dataset.action = 'sched-toggle';
+  block.dataset.id = entry.id;
+  block.title = checkState === true ? '완료 (클릭으로 미완료)' 
+              : checkState === false ? '미완료 (클릭으로 미정)' 
+              : '클릭으로 완료 표시';
+  block.innerHTML = `
+    <span class="sched-block-label">${escapeHtml(entry.label)}${entry.alarm ? ' ⏰' : ''}</span>
+    <span class="sched-block-dur">${durStr}</span>
+  `;
+  row.appendChild(block);
+  
+  // 메모/편집 버튼 (오른쪽, 작게)
+  const editBtn = document.createElement('button');
+  editBtn.type = 'button';
+  editBtn.className = 'sched-edit-btn' + (hasNote ? ' has-note' : '');
+  editBtn.dataset.action = 'sched-edit';
+  editBtn.dataset.id = entry.id;
+  editBtn.title = hasNote ? '메모 있음 — 편집' : '메모/편집';
+  editBtn.innerHTML = icon('edit', 14) || '✎';
+  row.appendChild(editBtn);
+  
+  return row;
+}
+
+// 3-state 토글: undefined(기본/카테고리 색) → true(완료/초록) → false(미완료/빨강) → undefined
+function cycleScheduleCheck(entryId) {
+  const e = entries.find(x => x.id === entryId);
+  if (!e) return;
+  e.values = e.values || {};
+  if (e.values.check === undefined) e.values.check = true;
+  else if (e.values.check === true) e.values.check = false;
+  else delete e.values.check;
+  persist();
+  refreshAll();
+}
+
+function toggleScheduleCheck(entryId) {
+  // 이전 코드 호환용 — cycleScheduleCheck로 위임
+  cycleScheduleCheck(entryId);
+}
+
+function toggleScheduleAlarm(entryId) {
+  const e = entries.find(x => x.id === entryId);
+  if (!e) return;
+  if (e.alarm) {
+    e.alarm = '';
+  } else {
+    e.alarm = e.start || '';
+    if (typeof Notification !== 'undefined' && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+  }
+  saveTemplate();
+  persist();
+  refreshAll();
+}
+
+// ============== 시간 블록 편집 모달 ==============
+let sbModalState = { editingId: null, isNew: false, selectedCat: 'prep', selectedDays: [1,2,3,4,5] };
+
+function openScheduleBlockModal(entryId) {
+  const e = entries.find(x => x.id === entryId);
+  if (!e) return;
+  sbModalState.editingId = entryId;
+  sbModalState.isNew = false;
+  sbModalState.selectedCat = e.category || 'prep';
+  sbModalState.selectedDays = Array.isArray(e.days) 
+    ? e.days.map(d => typeof d === 'string' ? parseInt(d,10) : d).filter(d => !isNaN(d))
+    : [1,2,3,4,5];
+  
+  document.getElementById('sbModalTitle').textContent = '시간 블록 편집';
+  document.getElementById('sbLabel').value = e.label || '';
+  document.getElementById('sbStart').value = e.start || '';
+  document.getElementById('sbEnd').value = e.end || '';
+  document.getElementById('sbNote').value = (e.values && e.values.note) || '';
+  document.getElementById('sbAlarm').checked = !!e.alarm;
+  document.getElementById('sbDelete').style.display = 'block';
+  
+  renderSbCatChips();
+  renderSbDayChips();
+  document.getElementById('sbModal').classList.add('open');
+  setTimeout(() => document.getElementById('sbLabel').focus(), 80);
+}
+
+function openNewScheduleBlockModal() {
+  sbModalState.editingId = null;
+  sbModalState.isNew = true;
+  sbModalState.selectedCat = 'prep';
+  // 기본 요일: 오늘 요일 1개
+  const today = new Date(currentDate + 'T00:00:00');
+  sbModalState.selectedDays = [today.getDay()];
+  
+  document.getElementById('sbModalTitle').textContent = '새 시간 블록';
+  document.getElementById('sbLabel').value = '';
+  document.getElementById('sbStart').value = '09:00';
+  document.getElementById('sbEnd').value = '10:00';
+  document.getElementById('sbNote').value = '';
+  document.getElementById('sbAlarm').checked = false;
+  document.getElementById('sbDelete').style.display = 'none';
+  
+  renderSbCatChips();
+  renderSbDayChips();
+  document.getElementById('sbModal').classList.add('open');
+  setTimeout(() => document.getElementById('sbLabel').focus(), 80);
+}
+
+function closeScheduleBlockModal() {
+  document.getElementById('sbModal').classList.remove('open');
+  sbModalState.editingId = null;
+}
+
+function renderSbCatChips() {
+  document.querySelectorAll('#sbCatGrid .sb-cat-chip').forEach(c => {
+    c.classList.toggle('active', c.dataset.cat === sbModalState.selectedCat);
+  });
+}
+function renderSbDayChips() {
+  document.querySelectorAll('#sbDayChips .sb-day-chip').forEach(c => {
+    const d = parseInt(c.dataset.day, 10);
+    c.classList.toggle('on', sbModalState.selectedDays.includes(d));
+  });
+}
+
+function saveScheduleBlock() {
+  const label = document.getElementById('sbLabel').value.trim();
+  const start = document.getElementById('sbStart').value;
+  const end = document.getElementById('sbEnd').value;
+  const note = document.getElementById('sbNote').value;
+  const alarmOn = document.getElementById('sbAlarm').checked;
+  
+  if (!label) { showToast('활동 이름을 입력하세요'); return; }
+  if (!start || !end) { showToast('시작/끝 시간을 모두 입력하세요'); return; }
+  if (sbModalState.selectedDays.length === 0) { showToast('요일을 1개 이상 선택하세요'); return; }
+  
+  if (sbModalState.isNew) {
+    // 새 entry 생성
+    const newEntry = {
+      id: 'sched_user_' + Date.now().toString(36) + Math.random().toString(36).slice(2,5),
+      label,
+      start, end,
+      category: sbModalState.selectedCat,
+      types: ['check'],
+      values: note ? { note } : {},
+      pinned: true,
+      days: [...sbModalState.selectedDays].sort((a,b)=>a-b),
+      alarm: alarmOn ? start : '',
+      alarmMessage: '',
+      goalMinutes: scheduleMinutesBetween(start, end),
+    };
+    entries.push(newEntry);
+  } else {
+    const e = entries.find(x => x.id === sbModalState.editingId);
+    if (!e) { closeScheduleBlockModal(); return; }
+    e.label = label;
+    e.start = start;
+    e.end = end;
+    e.category = sbModalState.selectedCat;
+    e.days = [...sbModalState.selectedDays].sort((a,b)=>a-b);
+    e.alarm = alarmOn ? start : '';
+    e.goalMinutes = scheduleMinutesBetween(start, end);
+    e.values = e.values || {};
+    if (note) e.values.note = note;
+    else delete e.values.note;
+    // 알람 권한 요청
+    if (alarmOn && typeof Notification !== 'undefined' && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+  }
+  
+  saveTemplate();
+  persist();
+  closeScheduleBlockModal();
+  refreshAll();
+  showToast(sbModalState.isNew ? '시간 블록이 추가되었습니다' : '저장되었습니다');
+}
+
+function deleteScheduleBlock() {
+  if (!sbModalState.editingId) return;
+  if (!confirm('이 시간 블록을 삭제할까요? 모든 요일에서 사라집니다.')) return;
+  const idx = entries.findIndex(e => e.id === sbModalState.editingId);
+  if (idx !== -1) entries.splice(idx, 1);
+  saveTemplate();
+  persist();
+  closeScheduleBlockModal();
+  refreshAll();
+  showToast('삭제되었습니다');
+}
+
 function renderItems() {
   const container = document.getElementById('items');
   container.innerHTML = '';
-  const visible = entries.filter(e => !e.pinned || entryAppliesToDate(e, currentDate));
-  document.getElementById('itemCount').textContent = `${visible.length}개`;
-  document.getElementById('growthCount').textContent = visible.length;
+  // 시간표 블록만 표시 (자유 항목 entries는 숨김)
+  const visible = entries
+    .filter(e => !e.pinned || entryAppliesToDate(e, currentDate))
+    .filter(isScheduleBlock);
+  const cntEl = document.getElementById('itemCount');
+  if (cntEl) cntEl.textContent = `${visible.length}개`;
+  const growthCntEl = document.getElementById('growthCount');
+  if (growthCntEl) growthCntEl.textContent = visible.length;
   if (visible.length === 0) {
     container.innerHTML = `<div class="empty-state">
       <div class="empty-state-emoji">○</div>
-      오늘 표시할 항목이 없습니다<br>아래 + 버튼으로 추가해보세요</div>`;
+      시간표가 비어있어요
+      <br><button type="button" class="sched-empty-action" data-action="reload-schedule">기본 시간표 불러오기</button></div>`;
     return;
   }
-  visible.forEach(entry => {
-    const types = entry.types || (entry.type ? [entry.type] : ['text']);
-    const values = entry.values || {};
-    const hasGoal = (entry.goalMinutes || 0) > 0;
-    const hasCheck = types.includes('check');
-    
-    const progress = getEntryProgress(entry, values);
-    const isFullDone = progress !== null && progress >= 0.99;
-    const isPartial = progress !== null && progress > 0 && progress < 0.99;
-    
-    const div = document.createElement('div');
-    div.className = 'item' + (isFullDone ? ' done' : '') + (entry.fromGoalId ? ' from-goal' : '');
-    div.dataset.id = entry.id;
-    
-    let checkCls = '', checkSymbol = '', checkBg = '';
-    if (isFullDone) { 
-      checkCls = 'checked'; checkSymbol = '✓'; 
-      checkBg = progressColor(1);
-    } else if (isPartial) { 
-      checkCls = 'partial'; checkSymbol = Math.round(progress * 100) + '%';
-      checkBg = progressColor(progress);
-    } else if (values.check === false || values.check === 'false') { 
-      checkCls = 'failed'; checkSymbol = '✗'; 
-    }
-    
-    const chips = [];
-    if (entry.fromGoalId) {
-      const goal = findGoal(entry.fromGoalId);
-      if (goal) {
-        const pIso = goalPrimaryISO(goal);
-        if (pIso) {
-          const dday = computeDDay(pIso);
-          chips.push(`<div class="meta-chip from-goal">${icon('target', 10)} ${dday.text}</div>`);
-        }
-      }
-    }
-    if (entry.pinned && entry.days && !entry.days.includes('all') && !entry.fromGoalId) {
-      const dayLabels = entry.days.map(d => DAY_SHORT[typeof d === 'string' ? parseInt(d,10) : d]).join('·');
-      chips.push(`<div class="meta-chip pinned">${dayLabels}</div>`);
-    }
-    if (!entry.pinned) chips.push(`<div class="meta-chip">오늘만</div>`);
-    if (hasGoal) chips.push(`<div class="meta-chip goal">${icon('clock', 10)} ${formatMinutes(entry.goalMinutes)}</div>`);
-    if (entry.alarm) chips.push(`<div class="meta-chip alarm">${icon('bell', 10)} ${entry.alarm}</div>`);
-    // 실행의도 / 묶음 / 난이도 칩 (Gollwitzer, Milkman, Csikszentmihalyi)
-    if (entry.cue) chips.push(`<div class="meta-chip cue" title="언제: ${escapeHtml(entry.cue)}">${icon('play', 10)} ${escapeHtml(entry.cue)}</div>`);
-    if (entry.place) chips.push(`<div class="meta-chip place" title="어디서: ${escapeHtml(entry.place)}">${icon('mapPin', 10)} ${escapeHtml(entry.place)}</div>`);
-    if (entry.bundle) chips.push(`<div class="meta-chip bundle" title="함께: ${escapeHtml(entry.bundle)}">${icon('link', 10)} ${escapeHtml(entry.bundle)}</div>`);
-    if (entry.difficulty && entry.difficulty !== 3) {
-      const diffMap = { 1: '◇', 2: '◇◇', 4: '◆◆◆◆', 5: '◆◆◆◆◆' };
-      const diffNames = { 1: '아주 쉬움', 2: '쉬움', 4: '도전적', 5: '꽤 도전적' };
-      chips.push(`<div class="meta-chip difficulty" title="난이도: ${diffNames[entry.difficulty]}">${diffMap[entry.difficulty]}</div>`);
-    }
-    
-    const checkStyle = checkBg ? `style="background:${checkBg}; border-color:${checkBg};"` : '';
-    const headHTML = `<div class="item-head">
-      ${hasCheck || hasGoal ? `<button class="checkbox ${checkCls}" ${checkStyle} data-action="check" data-id="${entry.id}">${checkSymbol}</button>` 
-                 : `<div style="width:22px;flex-shrink:0;"></div>`}
-      <input type="text" class="item-label" value="${escapeHtml(entry.label)}" maxlength="60" data-id="${entry.id}" ${entry.fromGoalId ? 'readonly' : ''}>
-      <div class="item-meta">${chips.join('')}</div>
-      <div class="item-actions">
-        ${!entry.fromGoalId ? `<button class="item-action-btn" data-action="edit" data-id="${entry.id}" title="수정">${icon('pencil', 14)}</button>` : ''}
-        ${!entry.fromGoalId ? `<button class="item-action-btn delete" data-action="delete" data-id="${entry.id}" title="삭제">${icon('trash', 14)}</button>` : ''}
-      </div>
-    </div>`;
-    
-    const bodyParts = [];
-    
-    // 장기 목표에서 온 항목: MCII plan inline + D-Day 마이크로카피
-    if (entry.fromGoalId) {
-      const goal = findGoal(entry.fromGoalId);
-      if (goal) {
-        const pIso = goalPrimaryISO(goal);
-        if (pIso) {
-          const dday = computeDDay(pIso);
-          const primary = getPrimaryDeadline(goal);
-          const labelStr = primary && primary.label ? ` (${primary.label})` : '';
-          // D-Day 7일 이내면 마이크로카피
-          if (dday.days >= 0 && dday.days <= 7) {
-            bodyParts.push(`<div class="dday-microcopy">⏳ 마지막 ${dday.days === 0 ? '오늘' : dday.days + '일'}이 가장 중요해요${labelStr}. 막판 가속이 차이를 만듭니다. (Goal Gradient · Hull 1934)</div>`);
-          }
-        }
-      }
-    }
-    
-    // 시간 슬라이더 (목표 시간 있고 완료 아닐 때)
-    if (hasGoal && !isFullDone) {
-      const actual = values.actualMinutes || 0;
-      const pct = Math.min(100, Math.round((actual / entry.goalMinutes) * 100));
-      const fillColor = progressColor(pct / 100);
-      const pctColor = actual === 0 ? 'var(--text-muted)' : fillColor;
-      
-      bodyParts.push(`<div class="time-progress">
-        <div class="time-progress-header">
-          <span class="time-progress-title">${icon('clock', 11)} 진행 시간</span>
-          <span class="time-progress-pct" style="color:${pctColor}">${formatMinutes(actual)} / ${formatMinutes(entry.goalMinutes)} · ${pct}%</span>
-        </div>
-        <div class="time-progress-bar">
-          <div class="time-progress-fill" style="width:${pct}%; background:${fillColor}"></div>
-        </div>
-        <div class="time-slider-wrap">
-          <input type="range" class="time-slider" 
-                 min="0" max="${entry.goalMinutes}" step="10" 
-                 value="${actual}"
-                 data-id="${entry.id}" data-action="time-slider">
-          <div class="time-slider-labels">
-            <span>0분</span>
-            <span>${formatMinutes(Math.round(entry.goalMinutes / 2))}</span>
-            <span>${formatMinutes(entry.goalMinutes)}</span>
-          </div>
-        </div>
-        <div class="progress-microcopy">💡 60%도 큰 진전이에요. 작은 진전 하나가 동기를 가장 크게 좌우합니다. (Progress Principle · Amabile, 2011)</div>
-      </div>`);
-    }
-    
-    if (types.includes('text')) {
-      bodyParts.push(`<div class="field-row">
-        <span class="field-icon">≡</span>
-        <input type="text" class="field-input" placeholder="한 줄 기록 (예: 30회, 1시간)" 
-               value="${escapeHtml(values.text || '')}" data-id="${entry.id}" data-field="text"></div>`);
-    }
-    if (types.includes('textarea')) {
-      bodyParts.push(`<div class="field-row" style="align-items:flex-start;">
-        <span class="field-icon" style="margin-top:8px;">¶</span>
-        <textarea class="field-input" placeholder="자세한 기록..." 
-                  data-id="${entry.id}" data-field="textarea">${escapeHtml(values.textarea || '')}</textarea></div>`);
-    }
-    if (types.includes('group')) {
-      bodyParts.push(`<div class="subs" data-subs-id="${entry.id}"></div>
-                      <button class="add-sub-btn" data-action="add-sub" data-id="${entry.id}">+ 하위 항목</button>`);
-    }
-    const bodyHTML = bodyParts.length ? `<div class="item-body">${bodyParts.join('')}</div>` : '';
-    div.innerHTML = headHTML + bodyHTML;
-    container.appendChild(div);
-    if (types.includes('group')) renderSubs(entry.id);
-  });
+  renderScheduleTable(visible, container);
 }
 
 function renderSubs(entryId) {
@@ -4457,6 +5293,7 @@ function renderRecoverBanner() {
 function renderRestDay() {
   const banner = document.getElementById('restDayBanner');
   const btn = document.getElementById('restDayBtn');
+  if (!banner || !btn) return;  // 제거된 UI라 가드
   const isRest = isRestDay(currentDate);
   if (isRest) {
     banner.style.display = 'flex';
@@ -4646,13 +5483,9 @@ function renderFreePrompt() {
 function refreshAll() {
   renderDate();
   renderIdentity();
-  renderFreshStart();
-  renderRecoverBanner();
+  // 배너/팝업 비활성화 (사용자 요청) — renderFreshStart, renderRecoverBanner, renderLettersDue,
+  // renderFirstProgress, renderReviewCard, renderInsights 호출 안 함
   renderRestDay();
-  renderLettersDue();
-  renderFirstProgress();
-  renderReviewCard();
-  renderInsights();
   renderGoals();
   renderItems();
   renderSummary();
@@ -5768,7 +6601,7 @@ function bindEvents() {
   document.getElementById('syncConflictUseRemote').addEventListener('click', () => syncResolveConflict(true));
   document.getElementById('syncConflictUseLocal').addEventListener('click', () => syncResolveConflict(false));
 
-  document.getElementById('addBtn').addEventListener('click', () => openModal(null));
+  document.getElementById('addBtn').addEventListener('click', () => openNewScheduleBlockModal());
   document.getElementById('modalClose').addEventListener('click', closeModal);
   document.getElementById('modalCancel').addEventListener('click', closeModal);
   document.getElementById('modalSave').addEventListener('click', saveModal);
@@ -5822,6 +6655,32 @@ function bindEvents() {
   });
   document.getElementById('addRootSubgoalBtn').addEventListener('click', addRootSubgoal);
   document.getElementById('addDeadlineBtn').addEventListener('click', addDeadline);
+  
+  // ============== 시간 블록 모달 이벤트 ==============
+  document.getElementById('sbModalClose').addEventListener('click', closeScheduleBlockModal);
+  document.getElementById('sbCancel').addEventListener('click', closeScheduleBlockModal);
+  document.getElementById('sbSave').addEventListener('click', saveScheduleBlock);
+  document.getElementById('sbDelete').addEventListener('click', deleteScheduleBlock);
+  document.getElementById('sbModal').addEventListener('click', e => {
+    if (e.target.id === 'sbModal') closeScheduleBlockModal();
+  });
+  // 카테고리 칩
+  document.getElementById('sbCatGrid').addEventListener('click', e => {
+    const c = e.target.closest('[data-cat]');
+    if (!c) return;
+    sbModalState.selectedCat = c.dataset.cat;
+    renderSbCatChips();
+  });
+  // 요일 칩
+  document.getElementById('sbDayChips').addEventListener('click', e => {
+    const c = e.target.closest('[data-day]');
+    if (!c) return;
+    const d = parseInt(c.dataset.day, 10);
+    const idx = sbModalState.selectedDays.indexOf(d);
+    if (idx === -1) sbModalState.selectedDays.push(d);
+    else sbModalState.selectedDays.splice(idx, 1);
+    renderSbDayChips();
+  });
   
   // 다중 마감일 — 리스트 내 변경/삭제 위임
   document.getElementById('deadlineList').addEventListener('click', e => {
@@ -5886,27 +6745,33 @@ function bindEvents() {
     document.getElementById('freshBanner').style.display = 'none';
   });
   
-  // 오늘은 쉬기 토글
-  document.getElementById('restDayBtn').addEventListener('click', () => {
-    if (isRestDay(currentDate)) {
+  // 오늘은 쉬기 토글 (제거된 UI라 null 가드)
+  const restBtnEl = document.getElementById('restDayBtn');
+  if (restBtnEl) {
+    restBtnEl.addEventListener('click', () => {
+      if (isRestDay(currentDate)) {
+        setRestDay(currentDate, false);
+        showToast('휴식 표시를 해제했어요');
+      } else {
+        const used = countRestDaysInMonth(currentDate);
+        if (used >= 2) {
+          showToast('이번 달 휴식권을 모두 사용했어요 (월 2회)');
+          return;
+        }
+        setRestDay(currentDate, true);
+        showToast('🌿 오늘은 쉬는 날로 표시했어요');
+      }
+      refreshAll();
+    });
+  }
+  const restUndoEl = document.getElementById('restDayUndo');
+  if (restUndoEl) {
+    restUndoEl.addEventListener('click', () => {
       setRestDay(currentDate, false);
       showToast('휴식 표시를 해제했어요');
-    } else {
-      const used = countRestDaysInMonth(currentDate);
-      if (used >= 2) {
-        showToast('이번 달 휴식권을 모두 사용했어요 (월 2회)');
-        return;
-      }
-      setRestDay(currentDate, true);
-      showToast('🌿 오늘은 쉬는 날로 표시했어요');
-    }
-    refreshAll();
-  });
-  document.getElementById('restDayUndo').addEventListener('click', () => {
-    setRestDay(currentDate, false);
-    showToast('휴식 표시를 해제했어요');
-    refreshAll();
-  });
+      refreshAll();
+    });
+  }
   
   // 난이도 슬라이더 라이브 라벨
   document.getElementById('mDifficulty').addEventListener('input', updateDifficultyLabel);
@@ -6050,6 +6915,16 @@ function bindEvents() {
   document.getElementById('goalsList').addEventListener('click', e => {
     if (e.target.closest('details')) return;
     
+    // "전체 보기" 토글
+    const expandBtn = e.target.closest('[data-action="show-all-goals"]');
+    if (expandBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      showAllGoals = !showAllGoals;
+      renderGoals();
+      return;
+    }
+    
     // 피라미드 셀 클릭 처리 (모달 안 열고 직접 토글)
     const cell = e.target.closest('[data-goal-pyramid-cell]');
     if (cell) {
@@ -6085,6 +6960,41 @@ function bindEvents() {
     if (action === 'time-slider') return;
     e.preventDefault();
     e.stopPropagation();
+    
+    // "전체 보기" 토글
+    if (action === 'show-all-items') {
+      showAllItems = !showAllItems;
+      renderItems();
+      return;
+    }
+    
+    // 시간표 과거 블록 펼치기/접기
+    if (action === 'show-schedule-past') {
+      showSchedulePast = !showSchedulePast;
+      renderItems();
+      return;
+    }
+    
+    // 시간 블록 토글 (박스 자체 클릭) — 3-state: 기본→완료(초록)→미완료(빨강)→기본
+    if (action === 'sched-toggle' || action === 'sched-check') {
+      cycleScheduleCheck(btn.dataset.id);
+      return;
+    }
+    
+    // 시간 블록 행 클릭 → 편집/메모 모달
+    if (action === 'sched-edit') {
+      openScheduleBlockModal(btn.dataset.id);
+      return;
+    }
+    
+    // 빈 화면: 기본 시간표 강제 불러오기
+    if (action === 'reload-schedule') {
+      syncScheduleEntries();
+      loadDate(currentDate);  // refreshAll → renderItems 자동 호출됨
+      showToast('기본 시간표를 불러왔습니다');
+      return;
+    }
+    
     const id = btn.dataset.id;
     
     if (action === 'delete') deleteEntryById(id);
@@ -6172,13 +7082,16 @@ function loadDate(date) {
       const template = loadTemplate();
       const base = (template && template.length) ? template : DEFAULT_PINNED;
       entries = base.map(e => ({
-        id: uid(), label: e.label,
+        id: e.id || uid(),  // ← template에 id 있으면 보존 (sched_* 유지)
+        label: e.label,
         types: e.types || (e.type ? [e.type] : ['text']),
         values: {}, pinned: true,
         days: e.days || ['all'], alarm: e.alarm || '', alarmMessage: e.alarmMessage || '',
         goalMinutes: e.goalMinutes || 0,
         cue: e.cue || '', place: e.place || '', bundle: e.bundle || '',
         difficulty: e.difficulty || 3,
+        // 시간표 필드 보존 (시간 블록인 경우)
+        start: e.start || '', end: e.end || '', category: e.category || '',
         subs: e.subs ? e.subs.map(s => ({ label: s.label, value: '' })) : undefined,
       }));
     }
@@ -6197,6 +7110,8 @@ function normalizeEntry(e) {
       goalMinutes: e.goalMinutes || 0,
       cue: e.cue || '', place: e.place || '', bundle: e.bundle || '',
       difficulty: e.difficulty || 3,
+      // 시간표 필드 보존
+      start: e.start || '', end: e.end || '', category: e.category || '',
       subs: e.subs,
       fromGoalId: e.fromGoalId, fromTaskId: e.fromTaskId,
     };
@@ -6244,6 +7159,26 @@ function init() {
   updateAlarmBtn();
   renderDate();
   loadDate(currentDate);
+  
+  // 데이터 복구 v3: id 누락된 옛 sched 블록들 정리 + 시간표 강제 보장
+  if (!lsGet(lsKey('cleanup_v3_done'))) {
+    // 비-시간표 pinned 제거 (자유 항목)
+    entries = entries.filter(e => {
+      if (!e.pinned) return true;
+      if (e.id && e.id.startsWith('sched_')) return true;  // 시간표 보존
+      if (isScheduleBlock(e)) return true;  // start/end 있는 블록 보존
+      return false;
+    });
+    saveTemplate();
+    persist();
+    lsSet(lsKey('cleanup_v3_done'), '1');
+  }
+  
+  // 시간표 강제 동기화 (SCHEDULE_TEMPLATE이 단일 진실원천)
+  if (syncScheduleEntries()) {
+    loadDate(currentDate);
+  }
+  
   renderHistory();
   setInterval(checkAlarms, 30000);
   setTimeout(checkAlarms, 2000);
